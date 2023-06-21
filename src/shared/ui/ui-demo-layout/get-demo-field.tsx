@@ -1,7 +1,7 @@
-import { Input } from "../input";
-import { Dispatch, SetStateAction } from "react";
-import { UIComponentsParams } from "./types";
-import { ChangeEvent } from "react";
+import { Input } from '../input'
+import { Dispatch, SetStateAction } from 'react'
+import { UIComponentsParams } from './types'
+import { ChangeEvent } from 'react'
 
 export const getDemoField = (field: string, setParams: Dispatch<SetStateAction<UIComponentsParams>>) => {
     switch (field) {
@@ -15,6 +15,6 @@ export const getDemoField = (field: string, setParams: Dispatch<SetStateAction<U
                 />
             )
         default:
-            break;
+            break
     }
 }

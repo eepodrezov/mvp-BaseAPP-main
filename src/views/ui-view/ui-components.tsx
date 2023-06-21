@@ -1,6 +1,6 @@
-import { ButtonDemo, InputDemo } from "@/shared/ui"
+import { ButtonDemo, InputDemo } from '@/shared/ui'
 
 export const components = [
-  <ButtonDemo />,
-  <InputDemo />
+  <ButtonDemo key={0}/>,
+  <InputDemo key={0}/>
 ]

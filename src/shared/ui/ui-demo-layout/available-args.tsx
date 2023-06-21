@@ -4,7 +4,7 @@ import { Select } from '../select'
 
 const availableParamsOptions = [
     { label: 'Заголовок', value: 'label', id: 'label' }
-] as { label: string, value: DemoArg, id: string }[]
+] as { label: string; value: DemoArg; id: string }[]
 
 export interface AvailableArgsProps {
     setExtraParams: Dispatch<SetStateAction<UIDemoArgs>>

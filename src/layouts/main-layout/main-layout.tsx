@@ -8,7 +8,6 @@ import BasketEmptyIcon from '@/shared/assets/icons/navbar/basket-empty.svg'
 import RecipesIcon from '@/shared/assets/icons/navbar/recipes.svg'
 import ListIcon from '@/shared/assets/icons/navbar/list.svg'
 import ProfileIcon from '@/shared/assets/icons/navbar/profile.svg'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { UIButton } from '@/features/ui-button'
 

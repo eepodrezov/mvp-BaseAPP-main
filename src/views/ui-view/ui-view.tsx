@@ -1,5 +1,5 @@
-import { ContentSlider } from "@/shared/ui"
-import { components } from "./ui-components"
+import { ContentSlider } from '@/shared/ui'
+import { components } from './ui-components'
 
 
 export const UiView = () => {

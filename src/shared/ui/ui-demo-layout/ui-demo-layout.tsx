@@ -1,4 +1,4 @@
-import { useState, cloneElement, Dispatch, FC } from 'react'
+import { useState, cloneElement } from 'react'
 import { FCWithChildren } from '@/shared/@types'
 import { getDemoField } from './get-demo-field'
 import { UIDemoArgs, UIComponentsParams } from './types'
@@ -15,7 +15,6 @@ export const UIDemoLayout:FCWithChildren<UIDemoLayoutProps> = ({
 }) => {
   const [params, setParams] = useState<UIComponentsParams>({})
   const [extraArgs, setExtraArgs] = useState<UIDemoArgs>([])
-  console.log('first', extraArgs)
   return (
     <div 
       className='flex flex-col justify-between min-h-[50%]'

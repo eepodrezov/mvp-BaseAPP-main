@@ -1,15 +1,16 @@
 import { ReactNode, useState } from 'react'
 import { SwiperProps } from 'swiper/react'
-import { FCWithClassName } from '@/shared/@types'
+import { FCWithChildren } from '@/shared/@types'
 import 'swiper/css'
 import { Button } from '../button'
 import SliderArrow from '@/shared/assets/icons/common/slider-arrow.svg'
 
 
 export interface ContentSliderProps extends SwiperProps {
+  className?: string
 }
 
-export const ContentSlider: FCWithClassName<ContentSliderProps> = ({
+export const ContentSlider: FCWithChildren<ContentSliderProps> = ({
   children,
   className,
   ...rest

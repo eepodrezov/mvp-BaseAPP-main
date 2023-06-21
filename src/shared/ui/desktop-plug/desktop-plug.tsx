@@ -1,4 +1,3 @@
-import { useTranslate } from '@/shared/lib'
 import cn from 'classnames'
 import { FCWithClassName } from '@/shared/@types'
 import InDevelopmentPlugIcon from '@/shared/assets/icons/common/in-development-plug.svg'
@@ -9,7 +8,6 @@ export interface DesktopPlugProps {
 }
 
 export const DesktopPlug: FCWithClassName<DesktopPlugProps> = ({ width, height, className }) => {
-  const { t } = useTranslate(['common'])
   return (
     <div
       data-testid='image-no-photo'
@@ -20,7 +18,7 @@ export const DesktopPlug: FCWithClassName<DesktopPlugProps> = ({ width, height, 
       <p className='w-[276px] flex flex-col gap-5 items-center'>
         <InDevelopmentPlugIcon className='mb-small stroke-black' />
         <div className='croogla-title text-black text-center'>Только мобильная версия</div>
-        <div className='source-text text-center'>{`Переведите браузер в мобильное разрешение(<768px в ширину)`}</div>
+        <div className='source-text text-center'>{'Переведите браузер в мобильное разрешение(<768px в ширину)'}</div>
       </p>
     </div>
   )

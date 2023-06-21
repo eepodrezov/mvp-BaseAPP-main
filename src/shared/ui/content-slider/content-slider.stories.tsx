@@ -1,10 +1,10 @@
 import { Story, Meta } from '@storybook/react'
 import { mock, Random } from 'mockjs'
-import { Slider, SliderProps } from './content-slider'
+import { ContentSlider, ContentSliderProps } from './content-slider'
 
 export default {
-  title: 'Shared/Slider',
-  component: Slider,
+  title: 'Shared/ContentSlider',
+  component: ContentSlider,
   args: mock({
     'images|15': [
       {
@@ -20,9 +20,9 @@ export default {
   }),
 } as Meta
 
-const Template: Story<SliderProps> = args => (
+const Template: Story<ContentSliderProps> = args => (
   <div className='w-[870px]'>
-    <Slider {...args} />
+    <ContentSlider {...args} />
   </div>
 )
 
