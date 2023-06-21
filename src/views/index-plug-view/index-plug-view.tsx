@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import Logo from '@/shared/assets/logo.svg'
+import logo from '@/shared/assets/logo-black.png'
 
 export const IndexPlugView: FC = () => {
   const router = useRouter()
@@ -10,10 +10,9 @@ export const IndexPlugView: FC = () => {
   }
   setTimeout(start, 3000)
   return (
-    <div className='w-full h-screen flex justify-center items-center flex-col bg-logo'>
-      <Logo className='w-[100px]'/>
+    <div className='w-full h-screen'>
       <Link  href='/start'>
-        <p className='croogla-title'>eDa</p>
+        <img src={logo.src} alt="logo" />
       </Link>
     </div>
   )
