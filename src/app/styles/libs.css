@@ -1,0 +1,178 @@
+@import url('~react-toastify/dist/ReactToastify.min.css');
+@import url('~nprogress/nprogress.css');
+@import url('~react-loading-skeleton/dist/skeleton.css');
+
+#nprogress .bar {
+  @apply !bg-black !h-1;
+}
+
+.Toastify__toast {
+  @apply bg-white min-h-[84px] desktop:min-h-[112px] px-5 py-base desktop:px-large desktop:py-5 rounded-large text-black;
+}
+
+.Toastify__toast-container {
+  @apply flex flex-col gap-2 top-[90px] max-desktop:left-0 desktop:top-[118px] !w-full desktop:max-w-[380px] !p-small max-h-fit;
+}
+
+.Toastify__toast-body {
+  @apply contents;
+}
+
+.Toastify__toast-body > div {
+  @apply flex flex-col gap-small desktop:gap-5;
+}
+
+/* Custom checkbox styles */
+/* ::bofore */
+.custom-checkbox ~ label {
+  @apply before:content-[""] before:absolute before:-left-[13px] before:-translate-x-full hover:before:bg-border
+    before:top-[3px] before:w-[18px] before:h-[18px] before:border-[1.5px] before:border-black before:rounded-[5px]
+    before:transition-colors;
+}
+/* ::after */
+.custom-checkbox ~ label {
+  @apply after:content-[""] after:absolute after:bg-no-repeat after:bg-black after:top-[7px]
+    after:-left-[16px] after:-translate-x-full after:w-3 after:h-[9px]
+    after:transition-opacity after:opacity-0 transition-colors;
+}
+.custom-checkbox ~ label::after {
+  mask-image: url(../../shared/assets/icons/common/complete.svg);
+  mask-size: cover;
+  -webkit-mask-image: url(../../shared/assets/icons/common/complete.svg);
+  -webkit-mask-size: cover;
+}
+/* checkbox states */
+.custom-checkbox:not(:disabled) ~ label {
+  @apply cursor-pointer;
+}
+.custom-checkbox-error ~ label {
+  @apply before:!border-red;
+}
+.custom-checkbox:checked ~ label {  
+  @apply after:opacity-100;
+}
+.custom-checkbox:disabled ~ label {
+  @apply before:bg-gray before:!border-text text-text cursor-not-allowed;
+}
+/* Custom checkbox styles */
+
+/* rc-range styles */
+.rc-slider {
+  @apply relative h-[3px] my-[8.5px] mx-small touch-none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.rc-slider * {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.rc-slider-rail {
+  @apply absolute w-full h-[3px] bg-border rounded-xl;
+}
+.rc-slider-track {
+  @apply absolute h-[3px] bg-black rounded-xl;
+}
+.rc-slider-handle {
+  @apply absolute w-5 h-5 -mt-2 bg-black border border-black rounded-full cursor-grab active:cursor-grabbing touch-pan-x hover:bg-white active:bg-white;
+}
+.rc-slider-disabled {
+  @apply cursor-not-allowed;
+}
+.rc-slider-disabled .rc-slider-track {
+  @apply bg-border;
+}
+.rc-slider-disabled .rc-slider-handle {
+  @apply cursor-not-allowed bg-border border-border;
+}
+
+/* rc-datepicker styles */
+.rc-picker-header {
+  @apply flex items-start justify-end font-croogla text-[1.375rem] leading-[120%] mb-[18px]
+}
+
+.rc-picker-header-view {
+  @apply -order-1 flex gap-extra-small w-full justify-items-start
+}
+
+.rc-picker-header-super-next-btn {
+  @apply order-last
+}
+
+.rc-picker-content tbody::before{
+  @apply content-[''] block h-[1.125rem]
+}
+
+.rc-picker-content {
+  @apply w-full
+}
+
+.rc-picker-content th {
+  @apply font-source font-bold text-sm leading-[1.125rem] text-text
+}
+
+.rc-picker-cell {
+  @apply text-base font-bold leading-5 font-source !w-[2.875rem] !h-[2.375rem] text-text cursor-pointer rounded-xl pointer-events-none
+}
+
+.rc-picker-cell-in-view {
+  @apply text-black text-base font-bold leading-5 font-source rounded-xl pointer-events-auto
+}
+
+.rc-picker-cell-selected {
+  @apply text-white bg-black hover:border-none
+}
+
+.rc-picker-cell-inner {
+  @apply text-center flex items-center justify-center rounded-xl border w-full h-full
+}
+
+.rc-picker-cell-in-view .rc-picker-cell-inner {
+  @apply border-transparent hover:border-black
+}
+
+.rc-picker-cell .rc-picker-cell-inner {
+  @apply border-transparent
+}
+
+/* Start Custom Select styles */
+.rc-select {
+  @apply inline-block relative w-full;
+}
+.rc-select-dropdown {
+  @apply absolute bg-white border z-40 desktop:z-10 border-black rounded-xl;
+}
+.rc-select-dropdown-hidden {
+  @apply hidden;
+}
+.rc-select-selector {
+  @apply flex relative w-full;
+}
+.rc-select-selection-search {
+  @apply w-full cursor-pointer;
+}
+.rc-select-selection-item,
+.rc-select-selection-placeholder {
+  @apply absolute top-px left-1 pointer-events-none;
+}
+.rc-select-item-option {
+  @apply text-black h-[50px] flex items-center cursor-pointer font-source text-lg px-5 py-[13px] hover:bg-gray;
+}
+.rc-select-item-option-active {
+  @apply bg-gray font-bold;
+}
+.rc-select-item-option-disabled {
+  @apply text-gray;
+}
+.rc-virtual-list-holder {
+  @apply !max-h-[200px] overflow-auto rounded-xl shadow-button
+}
+.rc-virtual-list-scrollbar {
+  @apply !w-[5px]
+}
+.rc-virtual-list-scrollbar-thumb {
+  @apply !w-0.5 !bg-black !rounded-sm
+}
+.rc-select-disabled .rc-select-selector .rc-select-selection-search {
+  @apply !cursor-not-allowed
+}
+.rc-select-selection-placeholder {
+  @apply hidden
+}

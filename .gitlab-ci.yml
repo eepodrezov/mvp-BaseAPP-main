@@ -1,0 +1,80 @@
+variables:
+  DEV_USER: gitlab
+  DEV_HOST: 162.62.119.109
+  DEV_FOLDER: /var/www/ant-car/
+  CONTAINER_REGISTRY_PATH: frontend
+
+stages:
+  - test
+  - build
+  - deploy
+
+test:
+  stage: test
+  image: node:latest
+  tags:
+    - docker-shell
+  only: 
+    - dev
+    - infra/ci-cd
+    - infra/fix
+  cache:
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - .yarn
+  before_script:
+      - yarn install --frozen-lockfile --prefer-offline --cache-folder .yarn
+  script:
+      - yarn chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --exit-zero-on-changes
+
+
+build:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:v1.8.1-debug
+    entrypoint: [""]
+
+  tags:
+    - docker-shell
+  only: 
+    - dev
+    - infra/ci-cd
+
+  script: |
+     echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+     mkdir -p build/artifacts/
+     export IFS=''
+     export DATE=$(TZ='Europe/Moscow' date +%m.%dT%H.%M)
+     /kaniko/executor \
+      --build-arg "NEXT_PUBLIC_SPRINT_NUMBER=$NEXT_PUBLIC_SPRINT_NUMBER" \
+      --build-arg "NEXT_PUBLIC_DATE_STAMP=$DATE" \
+      --build-arg "NEXT_PUBLIC_TARGET=$NEXT_PUBLIC_TARGET" \
+      --build-arg "NEXT_PUBLIC_TOKEN_PATH=$NEXT_PUBLIC_TOKEN_PATH" \
+      --build-arg "NEXT_PUBLIC_API_MOCKING=$NEXT_PUBLIC_API_MOCKING" \
+      --build-arg "NEXT_PUBLIC_BUILD_STORYBOOK=$NEXT_PUBLIC_BUILD_STORYBOOK" \
+      --build-arg "NEXT_PUBLIC_API_PREFIX=$NEXT_PUBLIC_API_PREFIX" \
+      --build-arg "NEXT_PUBLIC_COMPANY_PHONE_NUMBER=$NEXT_PUBLIC_COMPANY_PHONE_NUMBER" \
+      --build-arg "NEXT_PUBLIC_CLIENT_ID=$NEXT_PUBLIC_CLIENT_ID" \
+      --build-arg "NEXT_PUBLIC_CLIENT_SECRET=$NEXT_PUBLIC_CLIENT_SECRET" \
+      --target prod \
+      --context $CI_PROJECT_DIR \
+      --dockerfile $CI_PROJECT_DIR/Dockerfile-ci \
+      --destination=$CI_REGISTRY_IMAGE/$CONTAINER_REGISTRY_PATH:dev-latest \
+      --snapshotMode=redo \
+      --destination=$CI_REGISTRY_IMAGE/$CONTAINER_REGISTRY_PATH:dev-$(TZ='Europe/Moscow' date +%m.%dT%H.%M)-${CI_COMMIT_SHORT_SHA} \
+      --use-new-run
+
+deploy:
+  image: alpine:3.14
+  stage: deploy
+  tags:
+    - docker-shell
+  script:
+    - chmod og= $id_rsa
+    - apk update && apk add openssh-client
+    - ssh -i $id_rsa -o StrictHostKeyChecking=no $DEV_USER@$DEV_HOST "cd $DEV_FOLDER && docker-compose pull frontend && docker-compose up -d frontend"
+  only: 
+    - dev
+    - infra/ci-cd
+  after_script:
+    - exit

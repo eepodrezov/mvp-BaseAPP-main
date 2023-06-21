@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Croogla 4F';
+  src: url('/fonts/Croogla4F.eot');
+  src: local('Croogla 4F'), local('Croogla4F'),
+    url('/fonts/Croogla4F.eot?#iefix') format('embedded-opentype'),
+    url('/fonts/Croogla4F.woff2') format('woff2'),
+    url('/fonts/Croogla4F.woff') format('woff'),
+    url('/fonts/Croogla4F.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@layer base {
+  a {
+    @apply underline transition-colors cursor-pointer source-text text-red hover:no-underline active:text-black active:no-underline visited:text-black disabled:text-border;
+  }
+  /* TODO: Переделать когда будет дизайн
+  button {
+    @apply text-primary hover:text-white active:text-lines disabled:text-gray;
+  } */
+  img {
+    @apply object-cover;
+  }
+
+  /* Заголовки */
+  .croogla-title {
+    @apply font-croogla text-4xl leading-[120%];
+  }
+  .croogla-secondary-title {
+    @apply font-croogla text-[2.125rem] leading-[120%];
+  }
+  .croogla-sub-title {
+    @apply font-croogla text-[1.75rem] leading-[120%];
+  }
+  .croogla-text {
+    @apply font-croogla text-2xl leading-[120%];
+  }
+  .croogla-secondary-text {
+    @apply font-croogla text-[1.375rem] leading-[120%];
+  }
+  .croogla-mobile {
+    @apply font-croogla text-xl leading-[120%];
+  }
+
+  /* Текст */
+  .source-title {
+    @apply font-source font-bold text-[1.375rem] leading-7;
+  }
+  .source-secondary-title {
+    @apply font-source font-bold text-lg leading-[1.4375rem];
+  }
+  .source-sub-title {
+    @apply text-lg font-semibold leading-6 font-source;
+  }
+  .source-text {
+    @apply font-source text-lg leading-[1.4375rem] font-normal;
+  }
+  .source-mobile-title {
+    @apply text-base font-bold leading-5 font-source;
+  }
+  .source-mobile-text {
+    @apply text-base leading-5 font-source;
+  }
+  .source-mobile-sub-text {
+    @apply font-source font-bold text-sm leading-[1.125rem];
+  }
+  .source-underline {
+    @apply font-source text-2xl leading-[30px];
+  }
+}
+
+@layer components {
+  .dark-link {
+    @apply text-gray hover:text-gray active:text-text visited:text-red source-underline;
+  }
+
+  .list {
+    @apply flex flex-col overflow-hidden bg-white source-text min-w-[240px] w-fit rounded-base drop-shadow-base;
+  }
+
+  .list > li {
+    @apply flex items-center min-h-[50px] px-5 text-black bg-white hover:bg-gray
+     hover:font-bold data-[headlessui-state=disabled]:text-border data-[headlessui-state=disabled]:cursor-not-allowed
+     hover:data-[headlessui-state=disabled]:bg-white hover:data-[headlessui-state=disabled]:font-normal aria-selected:font-bold
+     cursor-pointer transition-colors;
+  }
+
+}
+
+@layer utilities {
+  .input-focus {
+    @apply focus:outline-none focus-visible:ring-1;
+  }
+  .scrollbar-dropdown::-webkit-scrollbar {
+    @apply w-0.5 h-[70px] bg-white 
+  }
+  .scrollbar-dropdown::-webkit-scrollbar-thumb {
+    @apply bg-black rounded-sm
+  }
+  .container-empty-dropdown {
+    @apply min-h-[50px] py-3.5 px-5 !text-text !bg-white !cursor-default !font-normal border border-black rounded-xl
+  }
+  .select-preloader {
+    @apply h-10 p-1 mx-auto fill-black animate-spin
+  }
+}
