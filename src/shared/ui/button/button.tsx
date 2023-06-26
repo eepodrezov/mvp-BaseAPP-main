@@ -26,15 +26,15 @@ export const Button = forwardRef<HTMLButtonElement, PropsWithClassName<ButtonPro
         <button
           ref={ref}
           className={cn(
-            `group relative flex items-center justify-center min-h-[50px] rounded-xl
+            `group relative flex items-center justify-center min-h-[30px] rounded-xl
              disabled:text-border transition-colors disabled:cursor-not-allowed
              shadow-button active:shadow-none disabled:shadow-none outline-none`,
             className,
             {
               'text-white bg-black px-12 croogla-text desktop:enabled:hover:bg-red desktop:active:enabled:bg-black active:enabled:bg-red disabled:bg-gray':
                 variant === 'primary',
-              [`text-black bg-transparent border desktop:enabled:border-black px-large croogla-text desktop:enabled:hover:text-red active:enabled:text-red desktop:enabled:hover:border-red
-              desktop:active:enabled:text-black desktop:active:enabled:border-black active:enabled:border-red disabled:border-border`]:
+              [`text-main p2 bg-transparent border desktop:enabled:border-main px-large croogla-text desktop:enabled:hover:text-red active:enabled:text-red desktop:enabled:hover:border-red
+              desktop:active:enabled:text-black desktop:active:enabled:border-main active:enabled:border-red disabled:border-border`]:
                 variant === 'secondary' || variant === 'bordered-icon' || variant === 'download',
               'min-h-fit source-secondary-title text-black border-none shadow-none desktop:hover:enabled:text-red active:enabled:text-red desktop:active:enabled:text-black disabled:text-border':
                 variant === 'text' || variant === 'icon' || variant === 'text-gray',

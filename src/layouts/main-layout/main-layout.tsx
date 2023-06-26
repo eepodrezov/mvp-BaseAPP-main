@@ -10,6 +10,7 @@ import ListIcon from '@/shared/assets/icons/navbar/list.svg'
 import ProfileIcon from '@/shared/assets/icons/navbar/profile.svg'
 import { useRouter } from 'next/router'
 import { UIButton } from '@/features/ui-button'
+import { GlobalSystemButtons } from '@/shared/ui'
 
 
 const isBasketEmpty = true
@@ -27,7 +28,9 @@ export const MainLayout: FC<PropsWithChildren> = ({ children }) => {
   ]
   return (
   <div className='w-full relative flex justify-center items-center'>
-    <UIButton />
+    <GlobalSystemButtons>
+      <UIButton />
+    </GlobalSystemButtons>
     <div className='pb-[80px]'>{children}</div>
     {!isUI && <Navbar tabs={tabs}  className='w-full fixed bottom-0 border-t border-gray-light'/>}
   </div>

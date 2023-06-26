@@ -71,6 +71,23 @@
   .source-underline {
     @apply font-source text-2xl leading-[30px];
   }
+
+  /* Inter */
+  h1 {
+    @apply font-source text-[1rem] leading-[30px] font-bold;
+  }
+  h2 {
+    @apply font-source text-[0.875rem] leading-[150%] font-bold;
+  }
+  .p1 {
+    @apply font-source text-[1rem] leading-[135%] font-medium;
+  }
+  .p2 {
+    @apply font-source text-[0.875rem] leading-[150%] font-medium;
+  }
+  .p3 {
+    @apply font-source text-[0.875rem] leading-[150%] font-medium;
+  }
 }
 
 @layer components {
