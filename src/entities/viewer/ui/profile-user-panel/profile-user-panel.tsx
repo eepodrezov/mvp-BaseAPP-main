@@ -17,8 +17,8 @@ export const ProfileUserPanel = () => {
         <UserAvatarBlock />
         <div>
             <h1>{`${firstName} ${lastName}`}</h1>
-            <div className='p2 mb-1'>{`@${telegram}`}</div>
-            <Button className='rounded-none' variant='secondary'>{t('Find Friends')}</Button>
+            <div className='p2 mb-3'>{`@${telegram}`}</div>
+            <Button className='rounded-none px-20' variant='secondary'>{t('Find Friends')}</Button>
         </div>
     </div>
   )

@@ -9,7 +9,7 @@ export const UserAvatarBlock = () => {
     >
         <img 
             src={viewer?.avatar?.[0].href} alt='avatar'
-            className='w-[80px] h-[80px] rounded-full'
+            className='w-[100px] h-[100px] rounded-full'
         />
     </div>
   )

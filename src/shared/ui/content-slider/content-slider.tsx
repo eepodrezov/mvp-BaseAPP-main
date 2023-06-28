@@ -41,7 +41,7 @@ export const ContentSlider: FCWithChildren<ContentSliderProps> = ({
       >
         {(children as ReactNode[])[currentComponentIndex]}
       </div>
-      <div className='flex gap-5'>
+      <div className='flex gap-16'>
         <Button variant='icon' onClick={() => prev()}>
           <SliderArrow className='fill-black w-3 h-5 group-disabled:fill-border rotate-180' />
         </Button>

@@ -20,18 +20,18 @@ export const MainLayout: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter()
   const isUI = router.pathname.includes('ui')
   const tabs: TabItem[] = [
-    { name: t('Catalog'), url:'catalog', icon: <MainPageIcon />},
-    { name: t('Basket'),url:'basket', icon: isBasketEmpty ? <BasketEmptyIcon /> : <BasketFullIcon />},
-    { name: t('Recipes'),url:'recipes', icon: <RecipesIcon />},
-    { name: t('Product List'),url:'list', icon: <ListIcon />},
-    { name: t('Profile'),url:'profile', icon: <ProfileIcon />}
+    { name: t('Catalog'), url:'app/catalog', icon: <MainPageIcon />},
+    { name: t('Basket'),url:'app/basket', icon: isBasketEmpty ? <BasketEmptyIcon /> : <BasketFullIcon />},
+    { name: t('Recipes'),url:'app/recipes', icon: <RecipesIcon />},
+    { name: t('Product List'),url:'app/list', icon: <ListIcon />},
+    { name: t('Profile'),url:'app/profile', icon: <ProfileIcon />}
   ]
   return (
-  <div className='w-full relative flex justify-center items-center'>
+  <div className='w-screen px-5 relative flex justify-center items-center'>
     <GlobalSystemButtons>
       <UIButton />
     </GlobalSystemButtons>
-    <div className='pb-[80px]'>{children}</div>
+    <div className='pb-[80px] w-full'>{children}</div>
     {!isUI && <Navbar tabs={tabs}  className='w-full fixed bottom-0 border-t border-gray-light'/>}
   </div>
 )}

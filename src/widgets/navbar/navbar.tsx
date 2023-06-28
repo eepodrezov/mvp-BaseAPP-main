@@ -16,7 +16,7 @@ export const Navbar: FCWithClassName<ProfilePageNavbarProps> = ({ className, clo
     <div
       className={cn(
         className,
-        'w-full flex justify-around items-center bg-white z-50'
+        'w-full flex justify-around items-center bg-white z-50 pointer-events-none'
       )}
     >
       {tabs.map((tab: TabItem) => (
