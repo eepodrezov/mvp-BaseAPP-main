@@ -6,13 +6,14 @@ import Link from 'next/link'
 import { Button } from '@/shared/ui'
 
 const StartPage: NextPageWithLayout = () => {
+
   return (
     <div className='w-full h-screen flex flex-col items-center justify-center gap-5'>
       <Link href='/app'>
-        <Button>App</Button>
+        <Button id="app">App</Button>
       </Link>
       <Link href='/ui'>
-        <Button>UI</Button>
+        <Button id="ui">UI</Button>
       </Link>
     </div>
   )

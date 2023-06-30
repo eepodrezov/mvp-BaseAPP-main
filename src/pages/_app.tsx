@@ -6,6 +6,7 @@ import App from '@/app'
 import '@/app/index.css'
 import { useWindowDimensions } from '@/shared/hooks'
 import { DesktopPlug } from '@/shared/ui/desktop-plug'
+import Joyride from 'react-joyride'
 
 if (API_MOCKING === 'enabled') {
   require('@/app/mocks-server')
@@ -14,12 +15,25 @@ if (API_MOCKING === 'enabled') {
 const _App = (props: AppPropsWithLayout) => {
   const { isMobile } = useWindowDimensions()
   if (!isMobile) return <DesktopPlug />
+  const STEPS = [
+    {
+      target: '#app',
+      content: 'This is the App',
+    },
+    {
+      target: '#ui',
+      content: 'This is UI',
+    },
+  ]
   return (
     <>
       <Head>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
       </Head>
       <App {...props} />
+      <Joyride
+          steps={STEPS}
+      />
     </>
   )
 }
