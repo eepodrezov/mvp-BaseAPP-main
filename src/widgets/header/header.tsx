@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import { COMPANY_PHONE_NUMBER } from '@/shared/config'
 import { Button } from '@/shared/ui'
 import { ChangeLanguageButton, useTranslate } from '@/shared/lib'
 import { HeaderLogo } from '@/shared/ui/header-logo'
@@ -24,7 +23,6 @@ export const Header: FC<HeaderProps> = ({ isProfileHeader }) => {
   const viewer = useAtomValue(viewerAtom)
   const router = useRouter()
   const withoutCallbackButton = router.pathname === '/'
-  const PHONES_ARRAY = COMPANY_PHONE_NUMBER.split(',')
   return (
     <header
       className={cn('sticky bg-white top-0 border-b border-black z-20 hidden min-[1280px]:flex h-[108px] w-full', {

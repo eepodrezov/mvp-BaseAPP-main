@@ -10,7 +10,6 @@ import { getCarPrice, Location, Price } from '@/entities/car'
 import { sum } from 'lodash'
 import { serverSideValidationDeliveryCalculator } from '../../lib'
 import { useUpdateAtom } from 'jotai/utils'
-import { DELIVERY_TIME, DELIVERY_TIME_RU } from '@/shared/config'
 
 export interface DeliveryCalculatorProps {
   withTime?: boolean
@@ -56,17 +55,6 @@ export const DeliveryCalculator: FCWithClassName<DeliveryCalculatorProps> = ({
         text: country,
         textStyle: 'source-secondary-title',
         textStyleMobile: 'font-bold text-lg leading-[26px] font-source',
-      },
-      {
-        title: t('delivery:Delivery_time'),
-        text:
-          (location?.country?.name === 'Таможенный Союз'
-            ? `${DELIVERY_TIME_RU} `
-            : `${t('car:from')} ${DELIVERY_TIME} `) + t('car:days'),
-        textStyle: 'source-secondary-title',
-        textStyleMobile: 'source-mobile-title',
-        tooltipText: t('delivery:Delivery_time'),
-        withoutTime: !withTime,
       },
       {
         title: t('delivery:Price'),
@@ -128,8 +116,7 @@ export const DeliveryCalculator: FCWithClassName<DeliveryCalculatorProps> = ({
           {calculatorItems.map((item, index) =>
             item.loading ? (
               <Skeleton className='h-7' />
-            ) : (
-              !item.withoutTime && (
+            ) : ((
                 <InfoRow
                   {...item}
                   key={index}

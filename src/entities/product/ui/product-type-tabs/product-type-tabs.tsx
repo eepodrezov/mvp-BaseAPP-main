@@ -1,5 +1,5 @@
 import { Tabs } from '@/shared/ui'
-import { useAtom, atom } from 'jotai'
+import { useAtom } from 'jotai'
 import {  productCollectionType } from '../../model'
 import cn from 'classnames'
 import { useTranslate } from '@/shared/lib'

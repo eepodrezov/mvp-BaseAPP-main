@@ -53,7 +53,6 @@ export const NextImage: FC<NextImageProps> = ({
     return <PhotoPlug width={width} height={height} />
   }
 
-  console.log('image', src)
 
   return (
     <div className={cn('w-full h-full relative', wrapperClassname)}>

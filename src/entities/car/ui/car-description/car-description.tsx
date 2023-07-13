@@ -19,7 +19,6 @@ import { Button } from '@/shared/ui'
 import { normalizeArrayToSeparatedString } from '@/shared/helpers'
 import { getNumberWithDevider } from '@/shared/helpers'
 import { InfoRow } from '@/shared/ui'
-import { DELIVERY_TIME_RU, DELIVERY_TIME } from '@/shared/config'
 
 export interface CarDescriptionProps {
   car: Car
@@ -82,13 +81,6 @@ export const CarDescription: FCWithClassName<CarDescriptionProps> = ({ car, clas
     if (option.field === 'interiorColors')
       return t(getCarColorText(car.colors?.filter(color => color.type === 0) as Color[]))
     if (option.field === 'engineVolume') return `${car?.literEngineVolume} ${t('L')}`
-    if (option.field === 'deliveryTime') {
-      return (
-        (car?.location?.country?.name === 'Таможенный Союз'
-          ? `${DELIVERY_TIME_RU} `
-          : `${t('car:from')} ${DELIVERY_TIME} `) + t('car:days')
-      )
-    }
     if (option.field === 'firstRegDate' && carFieldValue) return new Date(carFieldValue as string).getFullYear()
     if (option.field === 'year' && carFieldValue === 0) return new Date(car.firstRegDate).getFullYear()
     if (option.elementKeys) return t(option.elementKeys?.[carFieldValue as number])

@@ -1,27 +1,8 @@
 import {
-  CarBrandSelect,
-  carCollectionType,
-  CarModelSelect,
-  CarOwnersRange,
   CarPriceRange,
-  CarTypeTabs,
-  CarAgeRange,
-  CAR_TYPE_NEW,
-  CarEnginePowerRange,
-  CarEngineVolumeRange,
-  CarFuelTypeSelect,
-  CarManufacturerCountrySelect,
-  CarManufacturerSelect,
-  CarLocationSelect,
-  CarMileageRange,
-  CarTransmissionTypeSelect,
-  CarDriveTypeSelect,
-  CarEcoTypeSelect,
   CarExteriorColorPalette,
-  CarInteriorColorPalette,
   hasFiltersChangedAtom,
   isFiltersApplyAtom,
-  CarMaterialPalette,
 } from '@/entities/car'
 import { Button, FilterDisclosure } from '@/shared/ui'
 import { useAtomValue } from 'jotai'
@@ -38,7 +19,6 @@ import { ProfileFullness } from '@/entities/viewer/ui/profile-fullness-panel'
 
 export const FiltersContent: FCWithClassName = ({ className }) => {
   const { t } = useTranslate(['car', 'common'])
-  const carType = useAtomValue(carCollectionType)
   const hasFiltersChanged = useAtomValue(hasFiltersChangedAtom)
 
   const setIsFiltersApply = useUpdateAtom(isFiltersApplyAtom)
