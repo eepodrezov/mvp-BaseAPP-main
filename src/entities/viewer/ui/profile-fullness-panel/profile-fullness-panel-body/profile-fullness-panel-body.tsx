@@ -50,13 +50,13 @@ const ProfileFullnessPanelBodyElem:FC<ProfileFullnessPanelBodyElemProps> = ({
         >
             <div
                 className={cn('flex gap-5', {
-                    'text-gray': isChecked
+                    'text-primary': isChecked
                 })}
             >
                 <SuccessIcon 
                     className={cn({
-                        'stroke-main': isChecked,
-                        'border-main border rounded-full': !isChecked
+                        'stroke-black': isChecked,
+                        'border-black border rounded-full': !isChecked
                     })}
                 />
                 {stageBio}

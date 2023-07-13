@@ -47,13 +47,10 @@ export const queryFetchFactory =
   <Response, RequestData = undefined>(url: string, defaultConfig: AxiosRequestConfig = {}) =>
   (config?: AxiosRequestConfig, ctx?: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>) =>
   async (context?: QueryFunctionContext) => {
-    if (context?.pageParam) {
+    if (context?.pageParam && config) {
       const { pageParam: page } = context
-      if (!defaultConfig.params) {
-        defaultConfig.params = { page }
-      } else {
-        defaultConfig.params.page = page
-      }
+      if (config.params) config.params.page = page
+      else config.params = { page }
     }
     const { data } = await httpClient<Response, RequestData>(merge({ url, ctx }, defaultConfig, config))
     return data
@@ -120,7 +117,6 @@ export function queryFactory<Response, FiltersContent = Record<string, unknown>>
 > {
   return config => {
     let serverSideFilters: CustomQueryKey
-
     return {
       prefetch: async (ctx, queryClient, preBuildFilters = {}, params) => {
         // Сделано под Symphony backend

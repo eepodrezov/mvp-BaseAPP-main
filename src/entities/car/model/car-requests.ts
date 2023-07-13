@@ -27,6 +27,7 @@ import {
   FAVORITES_REQUEST_TARGET,
   ResponseFavoriteReq,
   CarCollectionItem,
+  MATERIALS_REQUEST_TARGET,
 } from '../lib'
 import { AxiosRequestConfig } from 'axios'
 
@@ -50,6 +51,8 @@ export const queryFetchBodyTypes = queryFetchFactory<CollectionResponse<BodyType
 export const queryFetchGenerations = queryFetchFactory<CollectionResponse<Generation>>(GENERATIONS_REQUEST_TARGET)
 
 export const queryFetchColors = queryFetchFactory<CollectionResponse<Color>>(COLORS_REQUEST_TARGET)
+
+export const queryFetchMaterials = queryFetchFactory<CollectionResponse<Color>>(MATERIALS_REQUEST_TARGET)
 
 export const queryFetchCountries = queryFetchFactory<CollectionResponse<Country>>(COUNTRIES_REQUEST_TARGET)
 

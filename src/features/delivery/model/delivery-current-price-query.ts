@@ -1,10 +1,9 @@
 import { queryFactory, QueryParams } from '@/shared/lib'
 import { useRouter } from 'next/router'
-import { atom, useAtomValue } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { Delivery, DELIVERY_PRIMARY_KEY } from '../lib'
 import { queryFetchDelivery } from './delivert-requests'
-
-export const deliveryCarIdAtom = atom(0)
+import { deliveryCarIdAtom } from './store'
 
 const deliveryQuery = queryFactory(DELIVERY_PRIMARY_KEY, queryFetchDelivery)(filters => ({ params: filters }))
 

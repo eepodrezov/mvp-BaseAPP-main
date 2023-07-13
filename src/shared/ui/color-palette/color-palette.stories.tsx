@@ -1,20 +1,13 @@
 import { Story, Meta } from '@storybook/react'
 import { useState } from 'react'
 import { ColorPalette, ColorPaletteProps } from './color-palette'
+import { COLOR_ENTITY_MOCK } from '@/shared/config'
+import { mock } from 'mockjs'
 
 export default {
   title: 'Shared/ColorPalette',
   component: ColorPalette,
-  args: {
-    colors: [
-      { id: 1, name: 'Blue', hex: '#4285F4' },
-      { id: 2, name: 'Blue', hex: '#4285F4' },
-      { id: 3, name: 'Blue', hex: '#4285F4' },
-      { id: 4, name: 'Blue', hex: '#4285F4' },
-      { id: 5, name: 'Blue', hex: '#4285F4' },
-      { id: 6, name: 'Blue', hex: '#4285F4' },
-    ],
-  },
+  args: mock({ 'colors|6': [COLOR_ENTITY_MOCK] }),
 } as Meta
 
 const Template: Story<ColorPaletteProps> = args => {

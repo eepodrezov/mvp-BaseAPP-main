@@ -1,0 +1,12 @@
+{
+    "This cost is approximate and may vary depending on the method of delivery and exchange rates": "Эта стоимость является приблизительной и может варьироваться в зависимости от способа доставки и обменных курсов",
+    "Calculation_error":"Ошибка просчета. Вы можете связаться с менеджером через обратный звонок, чтобы уточнить стоимость.",
+
+    "Address":"Адрес",
+    "Russia": "Россия",
+    "Delivery_time": "Срок доставки",
+    "Price":"Цена",
+    "International_Delivery":"Международная доставка",
+    "Customs_clearance":"Растаможка",
+    "Domestic_Delivery":"Внутренняя доставка"
+}

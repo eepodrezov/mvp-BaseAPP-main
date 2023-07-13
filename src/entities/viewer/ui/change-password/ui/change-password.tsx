@@ -6,13 +6,14 @@ import { useAtomValue } from 'jotai'
 import { FC } from 'react'
 import { changePasswordSchema, FieldsChangePassword, serverSideChangePasswordValidation } from '../lib'
 import { changePasswordModalAtom, useChangePassword } from '../model'
+import { Controller } from 'react-hook-form'
 
 export const ChangePassword: FC = () => {
   const { t } = useTranslate(['profile', 'common'])
   const { onClose } = useModalState(changePasswordModalAtom)
   const viewer = useAtomValue(viewerAtom)
 
-  const { mutate } = useChangePassword({
+  const { mutate, isLoading } = useChangePassword({
     onSuccess: () => {
       onClose()
       notify(t('Password changed successfully'))
@@ -27,12 +28,10 @@ export const ChangePassword: FC = () => {
       <p className='source-text text-text'>{t('Enter your current password and create new password')}</p>
       <Form<FieldsChangePassword>
         validationSchema={changePasswordSchema(t)}
-        onSubmit={({ oldPassword, newPassword, repeatPassword }) =>
-          mutate({ id: viewer.id, oldPassword, repeatPassword, newPassword })
-        }
+        onSubmit={data => mutate({ id: viewer.id, ...data })}
         formParams={{ mode: 'onChange', shouldUnregister: true }}
       >
-        {({ isLoading, formState: { isValid } }) => (
+        {({ formState: { isValid }, control, trigger, watch }) => (
           <div className='flex flex-col gap-[23px]'>
             <Input
               name='oldPassword'
@@ -40,12 +39,25 @@ export const ChangePassword: FC = () => {
               placeholder={t('Current password')}
               type='password'
             />
-            <Input
+            <Controller
               name='newPassword'
-              label={t('New password')}
-              placeholder={t('New password')}
-              type='password'
-              passwordStrength
+              control={control}
+              render={({ field, fieldState: { error } }) => (
+                <Input
+                  {...field}
+                  name='newPassword'
+                  label={t('common:New_password')}
+                  placeholder={t('common:New_password')}
+                  type='password'
+                  onChange={e => {
+                    field.onChange(e)
+                    watch('repeatPassword') && trigger('repeatPassword')
+                  }}
+                  passwordStrength
+                  error={!!error}
+                  errorMessage={error?.message}
+                />
+              )}
             />
             <Input
               name='repeatPassword'

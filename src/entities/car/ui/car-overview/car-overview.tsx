@@ -48,9 +48,9 @@ export const CarOverview: FCWithClassName<CarOverviewProps> = ({ car, className 
 
   function getOverviewText(label: string, elementKeys: string[] | string, t: TFunction) {
     const carFieldValue = car[label as keyof Car]
-    if (label === 'exteriorColors') return getCarColorText(car.colors?.filter(color => color.type === 1) as Color[])
-    if (label === 'interiorColors') return getCarColorText(car.colors?.filter(color => color.type === 0) as Color[])
-    if (label === 'bodyType') return car?.bodyType?.name
+    if (label === 'exteriorColors') return t(getCarColorText(car.colors?.filter(color => color.type === 1) as Color[]))
+    if (label === 'interiorColors') return t(getCarColorText(car.colors?.filter(color => color.type === 0) as Color[]))
+    if (label === 'bodyType') return t(car?.bodyType?.name)
     if (elementKeys === 'engine') return String(car?.literEngineVolume) + ` ${t('L')}`
     if (typeof carFieldValue === 'string') return carFieldValue
     return t(elementKeys?.[carFieldValue as number])

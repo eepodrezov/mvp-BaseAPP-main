@@ -1,11 +1,6 @@
 import { Nullable } from '@/shared/@types'
-import { BaseEntity } from '@/shared/@types'
 
 export type Steps = 1 | 2 | 3 | 4
-
-export interface Avatar extends BaseEntity {
-  href: string
-}
 export interface User {
   id: number
   isAgreementAccepted: boolean
@@ -24,7 +19,6 @@ export interface User {
   isPhoneConfirmed: boolean
   isTelegramConfirmed: boolean
   telegram: string
-  avatar: Avatar[]
 }
 export type UserDocument = {
   id?: number

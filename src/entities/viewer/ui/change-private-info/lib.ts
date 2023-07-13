@@ -16,6 +16,14 @@ export const serverSideValidationPrivateInfo = (t: TFunction, error?: AxiosError
       notify(t('common:You_can_send_a_confirmation_code_once_every_2_minutes'), { status: 'error' })
       return
     }
+    case 'phone: Пользователь с таким номеров телефона уже существует': {
+      notify(t('common:User_with_this_phone_number_already_exists'), { status: 'error' })
+      return
+    }
+    case 'email: Пользователь с таким email уже существует': {
+      notify(t('common:User_with_this_email_already_exists'), { status: 'error' })
+      return
+    }
     default: {
       notify(t('common:serverErrorMessage'), { status: 'error' })
       return

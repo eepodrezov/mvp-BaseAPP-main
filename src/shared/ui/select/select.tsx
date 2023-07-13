@@ -1,4 +1,4 @@
-import { ForwardedRef, forwardRef, ReactNode } from 'react'
+import { ForwardedRef, forwardRef, Fragment, ReactNode } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import Arrow from '@/shared/assets/icons/common/select-arrow.svg'
 import Loading from '@/shared/assets/icons/common/loading.svg'
@@ -80,10 +80,11 @@ const SelectComponent = <T extends string | number>(
       disabled={disabled}
       onChange={e => onChange?.(e)}
       {...(defaultValue && { defaultValue })}
+      {...rest}
     >
       {({ open }) => (
         <>
-          <Listbox.Button {...getReferenceProps({ ref: reference })} className='w-full'>
+          <Listbox.Button {...getReferenceProps({ ref: reference })} as={'div'} className='w-full'>
             <Input
               ref={ref}
               name={name}
@@ -136,9 +137,9 @@ const SelectComponent = <T extends string | number>(
             })}
           >
             {isLoading ? (
-              <div className='pointer-events-none rc-select-item-option justify-center'>
+              <span className='pointer-events-none rc-select-item-option justify-center'>
                 <Loading data-testid='select-preloader' className='select-preloader' />
-              </div>
+              </span>
             ) : options?.length ? (
               <Listbox.Options static className='rc-virtual-list-holder scrollbar-dropdown'>
                 {(options as SelectOption[])?.map(

@@ -11,10 +11,11 @@ import { mergeRefs } from '@/shared/helpers'
 import ApplyButton from '@/shared/assets/icons/sidebar-icons/apply-button.svg'
 import { useAtom, useAtomValue } from 'jotai'
 import { lastChangedFilter } from '../../model'
+import { useTimerDown } from '@/shared/hooks'
 
 export const FiltersApplyButton: FCWithClassName<{ children?: ReactElement; delayClickable?: number }> = ({
   children,
-  delayClickable = 5000,
+  delayClickable = 3,
   className = '',
 }) => {
   const { t } = useTranslate(['common'])
@@ -24,19 +25,16 @@ export const FiltersApplyButton: FCWithClassName<{ children?: ReactElement; dela
   const hasFiltersChanged = useAtomValue(hasFiltersChangedAtom)
   const [open, setOpen] = useState(false)
   const filterName = children?.props.name
+  const { seconds, setSeconds } = useTimerDown(0)
 
   useEffect(() => {
     setChangedFilter(filterName)
-  }, [children?.props.value || children?.props?.selectedTab])
+    setSeconds(delayClickable)
+  }, [children?.props.value, children?.props?.selectedTab, children?.props?.selectedIds])
 
   useEffect(() => {
-    if (changedFilter === filterName) {
-      setOpen(true)
-      setTimeout(() => {
-        setOpen(false), setChangedFilter(null)
-      }, delayClickable)
-    }
-  }, [changedFilter])
+    setOpen(!!(changedFilter === filterName && seconds))
+  }, [changedFilter, seconds])
 
   const applyFilters = () => {
     setOpen(false)

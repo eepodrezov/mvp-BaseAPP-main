@@ -20,6 +20,7 @@ export const registrationSchema = (t: TFunction, isValidateEmail: boolean) =>
       .required(t('validRequiredField'))
       .min(8, t('min8symbols'))
       .oneOf([yup.ref('plainPassword'), null], t('PasswordsMustMatch')),
+    userAgreementConfirmation: yup.boolean().required(t('validRequiredField')).oneOf([true], t('validRequiredField')),
   })
 
 export const serverSideRegistrationValidation = (

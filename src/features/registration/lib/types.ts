@@ -4,5 +4,7 @@ export type RequestRegistrationTypes = {
   lastName: string
   middleName: string
   plainPassword: string
+  userAgreementConfirmation?: boolean
   repeatPassword?: string
+  fingerprint?: string
 }

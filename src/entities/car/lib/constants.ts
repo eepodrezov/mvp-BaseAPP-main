@@ -66,6 +66,12 @@ export const CAR_TYPE_ECO_CONSTANTS_KEYS = [
   'CAR_TYPE_ECO_EURO_6',
 ]
 
+export const CAR_TYPE_WARRANTY_1 = 0
+export const CAR_TYPE_WARRANTY_2 = 1
+export const CAR_TYPE_WARRANTY_3 = 2
+
+export const CAR_TYPE_WARRANTY_CONSTANTS_KEYS = ['CAR_TYPE_WARRANTY_1', 'CAR_TYPE_WARRANTY_2', 'CAR_TYPE_WARRANTY_3']
+
 export const COLOR_TYPE_INTER = 0
 export const COLOR_TYPE_BODY = 1
 
@@ -100,9 +106,13 @@ export const GENERATIONS_REQUEST_TARGET = '/generations'
 
 export const GENERATIONS_COLLECTION_PRIMARY_KEY = [GENERATIONS_REQUEST_TARGET, 'generations-collection']
 
-export const COLORS_REQUEST_TARGET = '/colors'
+export const COLORS_REQUEST_TARGET = '/color_groups'
 
 export const COLORS_COLLECTION_PRIMARY_KEY = [COLORS_REQUEST_TARGET, 'colors-collection']
+
+export const MATERIALS_REQUEST_TARGET = '/material_groups'
+
+export const MATERIALS_COLLECTION_PRIMARY_KEY = [MATERIALS_REQUEST_TARGET, 'material-collection']
 
 export const MANUFACTURERS_REQUEST_TARGET = '/manufacturers'
 
@@ -168,7 +178,8 @@ export const CAR_COLLECTION_INITIAL_FILTERS_ATOM_VALUES = {
   brand: null as Nullable<number>,
   model: null as Nullable<number>,
   generation: null as Nullable<number>,
-  'location.country.name': null as Nullable<number>,
+  'location.country.id': null as Nullable<number>,
+  'location.country.isCustomUnion': null as Nullable<boolean>,
   'manufacturer.location.country': null as Nullable<number>,
   bodyType: null as Nullable<number>,
   manufacturer: null as Nullable<number>,
@@ -181,12 +192,13 @@ export const CAR_COLLECTION_INITIAL_FILTERS_ATOM_VALUES = {
   price: null as Nullable<number[]>,
   'mileage[between]': null as Nullable<number[]>,
   'ownersCount[between]': null as Nullable<number[]>,
-  'year[between]': null as Nullable<number[]>,
+  'age[between]': null as Nullable<number[]>,
   'enginePower[between]': null as Nullable<number[]>,
   'literEngineVolume[between]': null as Nullable<number[]>,
   order: DEFAULT_ORDER_VALUE as undefined | OrderValue,
   interiorColors: null as Nullable<number[]>,
-  сolors: null as Nullable<number[]>,
+  exteriorColors: null as Nullable<number[]>,
+  materials: null as Nullable<number[]>,
   visible: true,
   blocked: false,
   booked: false,
@@ -198,9 +210,12 @@ export const CAR_COLLECTION_INITIAL_FILTERS = {
   'price.value[lte]': null as Nullable<number>,
   'mileage[between]': null as Nullable<string>,
   'ownersCount[between]': null as Nullable<string>,
-  'year[between]': null as Nullable<string>,
+  'age[between]': null as Nullable<string>,
   'enginePower[between]': null as Nullable<string>,
   'literEngineVolume[between]': null as Nullable<string>,
+  'colorGroup[0]': null as Nullable<number[][]>,
+  'colorGroup[1]': null as Nullable<number[][]>,
+  'material.materialGroup.id': null as Nullable<number[][]>,
 }
 
 export const SELECT_FILTER_COLLECTION_INITIAL_FILTERS = {

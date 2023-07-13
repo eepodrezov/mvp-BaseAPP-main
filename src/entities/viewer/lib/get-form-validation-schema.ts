@@ -1,6 +1,7 @@
-import { FormField, TFunction } from '@/shared/@types'
+import { FormField, Nullable, TFunction } from '@/shared/@types'
 import dayjs from 'dayjs'
 import * as yup from 'yup'
+import { StringSchema } from 'yup'
 
 function getValidator(field: FormField, t: TFunction) {
   if (field.type === 'date')
@@ -31,12 +32,14 @@ function getValidator(field: FormField, t: TFunction) {
     )
   const onlyRuSchema =
     field.isOnlyRu && defaultSchema.matches(/^[\u0400-\u04FF ]+$/, t('common:formOnlyRuValidationErr'))
+
   const onlyNumberString =
     field.type === 'number' && defaultSchema.matches(/^\d+$/, t('common:formOnlyNumberStringValidationErr'))
+
   const schemas = [defaultSchema, isRequiredSchema, minSchema, maxSchema, onlyRuSchema, onlyNumberString]
+
   return schemas.reduce(
-    //@ts-expect-error
-    (acc, schema) => acc.concat(schema || defaultSchema),
+    (acc: StringSchema<Nullable<string>, Record<string, unknown>>, schema) => acc?.concat(schema || defaultSchema),
     defaultSchema
   )
 }

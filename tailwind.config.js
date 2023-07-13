@@ -20,6 +20,8 @@ module.exports = {
       transparent: 'transparent',
       currentColor: 'currentColor',
       black: 'rgb(var(--black) / <alpha-value>)',
+      white: 'rgb(var(--white) / <alpha-value>)',
+      gray: 'rgb(var(--gray) / <alpha-value>)',
       border: 'rgb(var(--border) / <alpha-value>)',
       text: 'rgb(var(--text) / <alpha-value>)',
       link: 'rgb(var(--link) / <alpha-value>)',
@@ -27,15 +29,6 @@ module.exports = {
       green: 'rgb(var(--green) / <alpha-value>)',
       orange: 'rgb(var(--orange) / <alpha-value>)',
       disabled: 'rgb(var(--disabled) / <alpha-value>)',
-
-      main: 'rgb(var(--main) / <alpha-value>)',
-      dark: 'rgb(var(--dark) / <alpha-value>)',
-      gray: 'rgb(var(--gray) / <alpha-value>)',
-      'gray-blue-dark': 'rgb(var(--gray-blue-dark) / <alpha-value>)',
-      'gray-blue-light': 'rgb(var(--gray-blue-light) / <alpha-value>)',
-      'gray-light': 'rgb(var(--gray-light) / <alpha-value>)',
-      white: 'rgb(var(--white) / <alpha-value>)',
-      error: 'rgb(var(--error) / <alpha-value>)',
     },
     extend: {
       height: {

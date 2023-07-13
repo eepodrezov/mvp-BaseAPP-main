@@ -1,31 +1,36 @@
-import { FC } from 'react'
-import { Swiper, SwiperSlide, SwiperProps, useSwiper } from 'swiper/react'
+import { Swiper, SwiperSlide, SwiperProps } from 'swiper/react'
 import { FCWithClassName, FileModel } from '@/shared/@types'
 import 'swiper/css'
 import { NextImage } from '../next-image'
-import { A11y, Keyboard } from 'swiper'
+import { A11y, Keyboard, Pagination } from 'swiper'
 import { PhotoPlug } from '../photo-plug'
-import SliderArrow from '@/shared/assets/icons/common/slider-arrow.svg'
 import cn from 'classnames'
+import { SlideButton } from './slide-button'
+import 'swiper/css/pagination'
+import { getCarImage } from '@/entities/car/lib/get-car-image'
 
 export interface SliderProps extends SwiperProps {
   images?: FileModel[]
-  slideWidth: number
-  slideHeight: number
-  slideBorderRadius: number
+  isModal?: boolean
+  slideWidth?: number | string
+  slideHeight?: number
+  aspectRatio?: string
+  slideBorderRadius?: number
   shownImagesCount?: number
-  currentImageIndex?: number
+  withRedLoader?: boolean
   onImageClick?: (index: number) => void
 }
 
 export const Slider: FCWithClassName<SliderProps> = ({
   images = [],
+  isModal,
   slideWidth,
   slideHeight,
+  aspectRatio,
   slideBorderRadius,
   onImageClick,
-  currentImageIndex,
   shownImagesCount,
+  withRedLoader,
   className,
   ...rest
 }) => {
@@ -36,46 +41,40 @@ export const Slider: FCWithClassName<SliderProps> = ({
 
   return (
     <Swiper
-      className='relative rounded-large'
-      modules={[A11y, Keyboard]}
+      className='flex items-end tablet:items-center w-full h-full'
+      modules={[A11y, Keyboard, Pagination]}
       touchMoveStopPropagation
-      allowTouchMove={false}
-      slidesPerView='auto'
+      slidesPerView={isModal ? 1 : 'auto'}
       {...rest}
     >
-      {isButtonsVisible && <SlideButton type='left' />}
-      {images.map((image, index) => (
-        <SwiperSlide
-          className={cn('cursor-pointer overflow-hidden', { 'border-2 border-black': currentImageIndex === index })}
-          key={image.id}
-          style={{ width: slideWidth, height: slideHeight, borderRadius: slideBorderRadius }}
-        >
-          <NextImage src={image.pathS3} onClick={() => onImageClick?.(index)} />
-        </SwiperSlide>
-      ))}
-      {isButtonsVisible && <SlideButton type='right' />}
+      {isButtonsVisible && <SlideButton isModal={isModal} type='left' />}
+      <div className='flex'>
+        {images.map((image, index) => (
+          <SwiperSlide
+            className={cn('cursor-pointer overflow-hidden', {
+              'border-2 border-black': !isModal && rest.initialSlide === index,
+              'cursor-grab active:cursor-grabbing': isModal,
+            })}
+            key={image.id}
+            style={{
+              width: slideWidth,
+              height: slideHeight,
+              borderRadius: slideBorderRadius,
+              aspectRatio: aspectRatio,
+            }}
+          >
+            <NextImage
+              {...(withRedLoader && { variant: 'red' })}
+              layout='fill'
+              objectFit={isModal ? 'contain' : 'cover'}
+              src={getCarImage(isModal ? 'origin' : 'small', image)}
+              onClick={() => onImageClick?.(index)}
+              wrapperClassname='flex justify-center items-center'
+            />
+          </SwiperSlide>
+        ))}
+      </div>
+      {isButtonsVisible && <SlideButton isModal={isModal} type='right' />}
     </Swiper>
-  )
-}
-
-interface SlideButtonProps {
-  type: 'left' | 'right'
-}
-
-const SlideButton: FC<SlideButtonProps> = ({ type }) => {
-  const swiper = useSwiper()
-  return (
-    <button
-      className={cn(
-        'z-10 absolute top-0 px-3 h-full bg-[rgba(0,0,0,0.2)] hover:bg-[rgba(0,0,0,0.6)] active:bg-black backdrop-blur-[4.5px]',
-        {
-          'left-0 rounded-l-large': type === 'left',
-          'right-0 rounded-r-large': type === 'right',
-        }
-      )}
-      onClick={() => (type === 'left' ? swiper.slidePrev() : swiper.slideNext())}
-    >
-      <SliderArrow className={cn('fill-white', { 'rotate-180': type === 'left' })} />
-    </button>
   )
 }

@@ -17,9 +17,13 @@ export const IS_STORYBOOK = process.env.STORYBOOK_ENV
 export const BASE_URL = IS_STORYBOOK ? 'http://storybook.mocks:3000' : getEnv('NEXT_PUBLIC_TARGET')
 export const TOKEN_PATH = IS_STORYBOOK ? 'token' : getEnv('NEXT_PUBLIC_TOKEN_PATH')
 export const API_MOCKING = getEnv('NEXT_PUBLIC_API_MOCKING')
-export const COMPANY_PHONE_NUMBER = IS_STORYBOOK ? '+7 (000)000-00-00' : getEnv('NEXT_PUBLIC_COMPANY_PHONE_NUMBER')
+export const COMPANY_PHONE_NUMBER: string = IS_STORYBOOK
+  ? '+7 (000)000-00-00,+7 (000)000-00-00'
+  : getEnv('NEXT_PUBLIC_COMPANY_PHONE_NUMBER')
+export const TECHNICAL_SUPPORT = getEnv('NEXT_PUBLIC_TECHNICAL_SUPPORT')
 export const CLIENT_ID = getEnv('NEXT_PUBLIC_CLIENT_ID') as string
 export const CLIENT_SECRET = getEnv('NEXT_PUBLIC_CLIENT_SECRET') as string
+export const SOCIAL_CONTACTS = getEnv('NEXT_PUBLIC_SOCIAL_CONTACTS')
 
 export const PROJECT_VERSION = `${getEnv('NEXT_PUBLIC_SPRINT_NUMBER')}-${getEnv('NEXT_PUBLIC_DATE_STAMP')}`
 

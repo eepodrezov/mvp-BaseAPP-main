@@ -149,7 +149,13 @@ const ExtraContentBlock: FC<ExtraContentBlockProps> = ({ text, disabled, t, onCl
     <p className='source-mobile-text desktop:source-text text-red'>
       {t('Please confirm')} {text}
     </p>
-    <Button variant='secondary' className='max-desktop:w-[150px]' onClick={onClick} disabled={disabled}>
+    <Button
+      variant='secondary'
+      className='max-desktop:w-[150px]'
+      onClick={onClick}
+      loading={disabled}
+      disabled={disabled}
+    >
       {t('common:Confirm')}
     </Button>
   </div>

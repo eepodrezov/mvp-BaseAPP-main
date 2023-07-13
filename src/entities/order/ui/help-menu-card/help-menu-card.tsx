@@ -37,6 +37,7 @@ export const HelpMenuCard: FC<HelpMenuCardProps> = ({ srcTelegram, className, ..
           <Menu.Item as='div' className='flex gap-2 h-[50px] text-border px-5 py-[13px]'>
             <HelpIcon className='stroke-border' /> <p className='source-text text-text'> {t('profile:Help')} </p>
           </Menu.Item>
+          {/* Скорее всего понадобится
           <Menu.Item>
             {({ close }) => (
               <Button
@@ -52,7 +53,7 @@ export const HelpMenuCard: FC<HelpMenuCardProps> = ({ srcTelegram, className, ..
                 {t('Telegram Chat')}
               </Button>
             )}
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item>
             {({ close }) => (
               <Button

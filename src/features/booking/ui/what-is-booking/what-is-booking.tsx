@@ -3,10 +3,13 @@ import { AttentionText } from '@/shared/ui'
 import cn from 'classnames'
 import QuestionMarkIcon from '@/shared/assets/icons/common/question-mark.svg'
 import { FCWithClassName } from '@/shared/@types'
+import { useAtomValue } from 'jotai'
+import { bookingCarPriceAtom } from '@/features/delivery'
+import { getCarPrice } from '@/entities/car'
 
 export const WhatIsBooking: FCWithClassName = ({ className }) => {
   const { t } = useTranslate(['booking', 'common'])
-
+  const bookingCarPrice = useAtomValue(bookingCarPriceAtom)
   return (
     <div className={cn('flex flex-col gap-5 p-5 text-black source-mobile-text desktop:source-text', className)}>
       <p className='flex gap-3 croogla-secondary-text'>
@@ -24,12 +27,16 @@ export const WhatIsBooking: FCWithClassName = ({ className }) => {
         </ul>
         <p>{t('Now you are at the first stage.')}</p>
         <p>
-          {t('You need to deposit an amount of 30 000 rubles, and we will guide you through every step of the way.')}
+          {`${t('You need to deposit an amount of')} ${getCarPrice(bookingCarPrice)} ${t(
+            'Rubles, and we will guide you through every step of the way.'
+          )}`}
         </p>
       </div>
       <AttentionText
         type='important'
-        text={t('The amount of 30 000 rubles is deducted from the final cost of the car.')}
+        text={`${t('The amount of')} ${getCarPrice(bookingCarPrice)} ${t(
+          'Rubles is deducted from the final cost of the car.'
+        )}`}
       />
       <AttentionText
         type='attention'

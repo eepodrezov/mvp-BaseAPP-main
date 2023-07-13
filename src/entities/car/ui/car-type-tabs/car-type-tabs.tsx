@@ -4,19 +4,18 @@ import { useAtom } from 'jotai'
 import { carCollectionMileage, carCollectionOwners, carCollectionType } from '../../model'
 import cn from 'classnames'
 import { useTranslate } from '@/shared/lib'
-import { CAR_TYPE_CONSTANTS_KEYS, CAR_TYPE_NEW, CAR_TYPE_USED } from '../../lib'
 import { useResetAtom } from 'jotai/utils'
 import { FCWithClassName } from '@/shared/@types'
 import { FiltersApplyButton } from '@/features'
 
 export const CarTypeTabs: FCWithClassName = ({ className }) => {
-  const { t } = useTranslate(['car'])
+  const { t } = useTranslate(['common'])
   const [carType, setCarType] = useAtom(carCollectionType)
   const resetOwnersRange = useResetAtom(carCollectionOwners)
   const resetMileageRange = useResetAtom(carCollectionMileage)
 
   useEffect(() => {
-    if (carType) {
+    if (carType != null) {
       resetOwnersRange()
       resetMileageRange()
     }
@@ -27,13 +26,13 @@ export const CarTypeTabs: FCWithClassName = ({ className }) => {
       <FiltersApplyButton>
         <Tabs
           name='tabs'
-          tabClassName='w-full'
+          tabClassName='w-full desktop:!px-4'
           selectedTab={carType}
           onChange={setCarType}
           className={cn('w-full', className)}
           tabs={[
-            { name: t(CAR_TYPE_CONSTANTS_KEYS[CAR_TYPE_NEW]) },
-            { name: t(CAR_TYPE_CONSTANTS_KEYS[CAR_TYPE_USED]) },
+            { name: t('Tab1') },
+            { name: t('Tab2') },
           ]}
         />
       </FiltersApplyButton>

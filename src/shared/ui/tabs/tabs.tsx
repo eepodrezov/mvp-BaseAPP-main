@@ -7,8 +7,6 @@ export type TabItem = {
   name: string
   panel?: JSX.Element
   disabled?: boolean
-  url?:string
-  icon?: JSX.Element
 }
 
 export interface TabsProps {
@@ -43,7 +41,7 @@ export const Tabs: FCWithClassName<TabsProps> = ({
                 className={cn(
                   `min-h-[50px] px-5 desktop:px-[33px] croogla-mobile desktop:croogla-text rounded-xl border border-transparent
                    desktop:hover:enabled:border-black active:enabled:bg-black active:text-white disabled:text-border
-                   disabled:cursor-not-allowed transition-colors`,
+                   disabled:cursor-not-allowed transition-colors whitespace-nowrap`,
                   tabClassName,
                   {
                     'bg-black text-white': selectedIndex === idx,

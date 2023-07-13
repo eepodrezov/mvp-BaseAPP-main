@@ -176,3 +176,9 @@
 .rc-select-selection-placeholder {
   @apply hidden
 }
+
+/* Start Custom swiper styles */
+
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  @apply bg-red
+}

@@ -25,7 +25,8 @@ import {
   carCollectionPrice,
   carCollectionTransmissionType,
   carCollectionType,
-  carCollectionYears,
+  carCollectionAge,
+  carCollectionIsCustomUnion,
 } from './car-collection-query'
 import { getBetweenFilterValue } from '@/shared/helpers'
 
@@ -42,6 +43,7 @@ export const useRangesCollection = (params?: QueryParams<CarFilterData>) => {
   const model = useAtomValue(carCollectionModel)
   const generation = useAtomValue(carCollectionGeneration)
   const location = useAtomValue(carCollectionLocation)
+  const isCustomUnion = useAtomValue(carCollectionIsCustomUnion)
   const manufacturerLocation = useAtomValue(carCollectionManufacturerCountry)
   const bodyType = useAtomValue(carCollectionBodyType)
   const manufacturer = useAtomValue(carCollectionManufacturer)
@@ -54,18 +56,19 @@ export const useRangesCollection = (params?: QueryParams<CarFilterData>) => {
   const price = useAtomValue(carCollectionPrice)
   const mileage = useAtomValue(carCollectionMileage)
   const owners = useAtomValue(carCollectionOwners)
-  const years = useAtomValue(carCollectionYears)
+  const age = useAtomValue(carCollectionAge)
   const enginePower = useAtomValue(carCollectionEnginePower)
   const literEngineVolume = useAtomValue(carCollectionEngineVolume)
   const interiorColors = useAtomValue(carCollectionInteriorColors)
-  const сolors = useAtomValue(carCollectionExteriorColors)
+  const exteriorColors = useAtomValue(carCollectionExteriorColors)
   return rangesCollectionQuery.useHookInitializer(
     {
       type,
       brand,
       model,
       generation,
-      'location.country.name': location,
+      'location.country.id': location,
+      'location.country.isCustomUnion': isCustomUnion,
       'manufacturer.location.country': manufacturerLocation,
       bodyType,
       manufacturer,
@@ -76,12 +79,12 @@ export const useRangesCollection = (params?: QueryParams<CarFilterData>) => {
       ecoType,
       configuration,
       interiorColors,
-      сolors,
+      exteriorColors,
       'price.value[gte]': price?.[0],
       'price.value[lte]': price?.[1],
       'mileage[between]': getBetweenFilterValue(mileage),
       'ownersCount[between]': getBetweenFilterValue(owners),
-      'year[between]': getBetweenFilterValue(years),
+      'age[between]': getBetweenFilterValue(age),
       'enginePower[between]': getBetweenFilterValue(enginePower),
       'literEngineVolume[between]': getBetweenFilterValue(literEngineVolume),
       locale,

@@ -10,7 +10,7 @@ export interface HeaderMobileProps {
 
 export const HeaderMobile: FC<HeaderMobileProps> = ({ burgerMenuContent }) => {
   return (
-    <header className='tablet:hidden sticky z-20 top-0 max-w-[1440px] bg-white flex items-center border-b border-black justify-between w-full p-5'>
+    <header className='min-[1280px]:hidden sticky z-20 top-0 max-w-[1440px] bg-white flex items-center border-b border-black justify-between w-full p-5'>
       <BurgerMenu>{burgerMenuContent}</BurgerMenu>
       <Link href='/'>
         <a>

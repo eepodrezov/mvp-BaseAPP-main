@@ -44,7 +44,7 @@ describe('CallbackFormTests', () => {
     await waitFor(() => expect(component.queryByTestId('submitButton')).not.toBeDisabled())
     fireEvent.click(component.getByTestId('submitButton'))
     expect(screen.queryByText(/validPhone/i)).not.toBeInTheDocument()
-    waitFor(() => expect(screen.getByText('callbackNotify')).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText('callbackNotify')).toBeInTheDocument())
     expect(screen.queryByText('serverErrorMessage')).not.toBeInTheDocument()
   })
   it('form input has error if incorrect value', async () => {

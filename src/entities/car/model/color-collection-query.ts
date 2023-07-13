@@ -7,6 +7,7 @@ import { CollectionResponse } from '@/shared/@types'
 const colorCollectionQuery = queryFactory(COLORS_COLLECTION_PRIMARY_KEY, queryFetchColors, {
   itemsPerPage: 100,
   type: COLOR_TYPE_INTER,
+  isDefaultInGroup: true,
 })(filters => ({
   params: filters,
 }))

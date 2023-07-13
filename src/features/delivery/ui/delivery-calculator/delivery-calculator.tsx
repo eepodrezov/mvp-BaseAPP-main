@@ -1,25 +1,29 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import cn from 'classnames'
 import { useTranslate } from '@/shared/lib'
 import { getNumberWithDevider } from '@/shared/helpers'
-import { useGetDelivery } from '../../model'
+import { bookingCarPriceAtom, useGetDelivery } from '../../model'
 import Skeleton from 'react-loading-skeleton'
 import { InfoRow, Informer } from '@/shared/ui'
 import { FCWithClassName } from '@/shared/@types'
-import { getCarPrice } from '@/entities/car'
+import { getCarPrice, Location, Price } from '@/entities/car'
 import { sum } from 'lodash'
 import { serverSideValidationDeliveryCalculator } from '../../lib'
+import { useUpdateAtom } from 'jotai/utils'
+import { DELIVERY_TIME, DELIVERY_TIME_RU } from '@/shared/config'
 
 export interface DeliveryCalculatorProps {
   withTime?: boolean
   withStar?: boolean
-  price?: number
+  price?: Price
+  location?: Location
 }
 
 export const DeliveryCalculator: FCWithClassName<DeliveryCalculatorProps> = ({
   withTime,
   withStar,
   price,
+  location,
   className,
 }) => {
   const { t } = useTranslate(['delivery', 'common', 'car'])
@@ -31,14 +35,18 @@ export const DeliveryCalculator: FCWithClassName<DeliveryCalculatorProps> = ({
   const loading = isIdle || isLoading
 
   const country = t('delivery:Russia')
-  const deliveryDays = 120
 
   const finalPrice = sum([
-    getCarPrice(data?.carPrice, true, false),
+    getCarPrice(price?.rubValue ?? price?.value, true, false),
     getCarPrice(data?.customClearance?.fullClearancePrice, true, false),
     data?.delivery.internationalDelivery,
     data?.delivery.domesticDelivery,
   ])
+
+  const setBookingCarPrice = useUpdateAtom(bookingCarPriceAtom)
+  useEffect(() => {
+    data && setBookingCarPrice(data?.bookingPrice)
+  }, [data])
 
   const currency = t('common:RUB')
   const calculatorItems = useMemo(
@@ -51,7 +59,10 @@ export const DeliveryCalculator: FCWithClassName<DeliveryCalculatorProps> = ({
       },
       {
         title: t('delivery:Delivery_time'),
-        text: `${t('car:from')} ${deliveryDays} ${t('car:days')}`,
+        text:
+          (location?.country?.name === 'Таможенный Союз'
+            ? `${DELIVERY_TIME_RU} `
+            : `${t('car:from')} ${DELIVERY_TIME} `) + t('car:days'),
         textStyle: 'source-secondary-title',
         textStyleMobile: 'source-mobile-title',
         tooltipText: t('delivery:Delivery_time'),
@@ -59,7 +70,8 @@ export const DeliveryCalculator: FCWithClassName<DeliveryCalculatorProps> = ({
       },
       {
         title: t('delivery:Price'),
-        text: `${data?.carPrice ? '~' + getCarPrice(data?.carPrice, true) : '~'} ${currency}`,
+        text: `~${price?.rubValue ? getCarPrice(price?.rubValue, true) : price?.value} ${currency}`,
+        subtext: price?.currency.name !== 'RUB' ? `${getCarPrice(price?.value)} ${price?.currency?.name || ''}` : null,
         textStyle: 'source-secondary-title',
         textStyleMobile: 'croogla-secondary-text',
         loading: loading,
@@ -69,6 +81,7 @@ export const DeliveryCalculator: FCWithClassName<DeliveryCalculatorProps> = ({
         text: data?.delivery.internationalDelivery
           ? `${'~' + getNumberWithDevider(data?.delivery.internationalDelivery?.toFixed(0), ',')} ${currency}`
           : null,
+        titleStyle: '!max-w-[170px]',
         textStyle: 'source-secondary-title',
         textStyleMobile: 'croogla-secondary-text',
         tooltipText: t('delivery:International_Delivery'),
@@ -112,17 +125,14 @@ export const DeliveryCalculator: FCWithClassName<DeliveryCalculatorProps> = ({
     <div className={cn('flex flex-col gap-[22px] text-black text-right desktop:max-tablet:text-start', className)}>
       {data || loading ? (
         <div className='flex flex-col gap-3'>
-          {calculatorItems.map(item =>
+          {calculatorItems.map((item, index) =>
             item.loading ? (
               <Skeleton className='h-7' />
             ) : (
               !item.withoutTime && (
                 <InfoRow
-                  title={item.title}
-                  text={item.text}
-                  textStyle={item.textStyle}
-                  textStyleMobile={item.textStyleMobile}
-                  tooltipText={item.tooltipText}
+                  {...item}
+                  key={index}
                   className='desktop:flex-col desktop:gap-0 desktop:items-start tablet:flex-row'
                 />
               )
@@ -133,7 +143,7 @@ export const DeliveryCalculator: FCWithClassName<DeliveryCalculatorProps> = ({
         <>
           <InfoRow
             title={t('delivery:Price')}
-            text={`~${getCarPrice(price, true)} ${currency}`}
+            text={`~${getCarPrice(price?.rubValue || price?.value, true)} ${currency}`}
             className='desktop:flex-col desktop:gap-0 desktop:items-start tablet:flex-row'
           />
           <Informer>{t('Calculation_error')}</Informer>

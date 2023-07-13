@@ -1,5 +1,6 @@
 import {
   auth,
+  cars,
   users,
   files,
   orders,
@@ -13,10 +14,12 @@ import {
   configurations,
   confirmCode,
   userDocument,
+  materials,
 } from './routes'
 
 export const handlers = [
   ...auth,
+  ...cars,
   ...users,
   ...files,
   ...orders,
@@ -30,10 +33,12 @@ export const handlers = [
   ...configurations,
   ...confirmCode,
   ...userDocument,
+  ...materials,
 ]
 
 export const storybookHandlers = {
   auth,
+  cars,
   users,
   files,
   orders,
@@ -46,4 +51,5 @@ export const storybookHandlers = {
   manufacturers,
   configurations,
   confirmCode,
+  materials,
 }

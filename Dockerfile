@@ -11,7 +11,7 @@ COPY . .
 RUN yarn install --frozen-lockfile && \
     yarn build
 
-FROM node:${NODE_VERSION} AS prod
+FROM node:${NODE_VERSION}-alpine AS prod
 
 WORKDIR /app
 

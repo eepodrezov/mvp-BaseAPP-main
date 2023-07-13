@@ -1,16 +1,18 @@
 import { Swiper, SwiperSlide, SwiperProps } from 'swiper/react'
-import { FCWithClassName } from '@/shared/@types'
+import { FCWithClassName, FileModel } from '@/shared/@types'
 import 'swiper/css'
 import { NextImage } from '../next-image'
 import { A11y, Keyboard } from 'swiper'
 import { PhotoPlug } from '../photo-plug'
 import cn from 'classnames'
+import { getCarImage, checkIsAnyPhoto } from '@/entities/car/lib/get-car-image'
 
 export interface CarouselProps extends SwiperProps {
-  images?: string[]
+  images?: FileModel[]
   slideWidth: number
   slideHeight: number
   slideBorderRadius: number
+  onSlideClick?: (index: number) => void
 }
 
 export const Carousel: FCWithClassName<CarouselProps> = ({
@@ -18,11 +20,12 @@ export const Carousel: FCWithClassName<CarouselProps> = ({
   slideWidth,
   slideHeight,
   slideBorderRadius,
+  onSlideClick,
   className,
   ...rest
 }) => {
   // TODO добавил проверку временно, чтобы отрабатывало на иришки
-  if (!images || !images.length || !images?.[0]) {
+  if (!images || !images.length || !checkIsAnyPhoto(images?.[0])) {
     return <PhotoPlug height={slideHeight} className={className} />
   }
 
@@ -36,9 +39,13 @@ export const Carousel: FCWithClassName<CarouselProps> = ({
       slidesPerView='auto'
       {...rest}
     >
-      {images.map(image => (
-        <SwiperSlide key={image} style={{ width: slideWidth, height: slideHeight }}>
-          <NextImage src={image} style={{ borderRadius: slideBorderRadius }} />
+      {images.map((image, index) => (
+        <SwiperSlide key={image.id} style={{ width: slideWidth, height: slideHeight }}>
+          <NextImage
+            onClick={() => onSlideClick?.(index)}
+            src={getCarImage('small', image)}
+            style={{ borderRadius: slideBorderRadius }}
+          />
         </SwiperSlide>
       ))}
     </Swiper>

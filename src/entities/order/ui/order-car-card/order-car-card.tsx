@@ -11,7 +11,6 @@ import {
   ORDER_STATUS_DELETING,
   ORDER_STATUS_USER_PAYMENT,
   ORDER_STATUS_WITH_LINK,
-  STATUS_BOOKING_CANCELLATION_BY_USER,
   STATUS_BOOKING_WAITING_FOR_PAYMENT,
   STATUS_LOCAL_DELIVERY_SUCCESS,
   VIEWER_TIME_TO_PAY_IN_MINUTES,
@@ -23,6 +22,7 @@ import Skeleton from 'react-loading-skeleton'
 import { useTimerDown } from '@/shared/hooks'
 import { AreYouSure } from '@/entities/viewer'
 import { useAtomValue } from 'jotai'
+import { DEFAULT_DATE_FORMAT } from '@/shared/config'
 
 export interface OrderCarCardProps {
   order?: OrderCar
@@ -31,7 +31,7 @@ export interface OrderCarCardProps {
 }
 
 export const OrderCarCard: FC<OrderCarCardProps> = ({ order, href, loading }) => {
-  const { t } = useTranslate(['car'])
+  const { t } = useTranslate(['order', 'car'])
   const dateUpdate = order?.currentStep.currentStatus.dateUpdate
   const queryClient = useAtomValue(queryClientAtom)
   const [isSureModalOpen, setIsSureModalOpen] = useState(false)
@@ -63,8 +63,8 @@ export const OrderCarCard: FC<OrderCarCardProps> = ({ order, href, loading }) =>
   }, [order])
 
   const { formatedDelayWithUnits, seconds } = useTimerDown(payTimeMinute * 60 + payTimeSecond, {
-    minutes: t('min'),
-    seconds: t('sec'),
+    minutes: t('car:min'),
+    seconds: t('car:sec'),
   })
 
   if (!order && !loading) return null
@@ -81,22 +81,9 @@ export const OrderCarCard: FC<OrderCarCardProps> = ({ order, href, loading }) =>
   const isChecked = false
 
   const classNameStatus = {
-    'text-red': !isDeleted || !isDelivered,
+    'text-red': !isDeleted && !isDelivered,
     'text-text': isDeleted,
     'text-border': isDelivered,
-  }
-
-  const getRowStatus = () => {
-    if (status && status < STATUS_BOOKING_CANCELLATION_BY_USER) {
-      return timeToBuy ? (
-        <>
-          {isDelivered || getOrderStatus(t, status)}
-          {isNeedToPayUser && <p className='font-semibold truncate'>{timeToBuy}</p>}
-        </>
-      ) : (
-        t('Time is over')
-      )
-    } else return getOrderStatus(t, status)
   }
 
   return (
@@ -112,8 +99,8 @@ export const OrderCarCard: FC<OrderCarCardProps> = ({ order, href, loading }) =>
           {loading ? (
             <Skeleton />
           ) : (
-            <Tooltip label={dayjs(dateCreate).format('MM.DD.YYYY HH:mm:ss')}>
-              <p>{dayjs(dateCreate).format('MM.DD.YYYY')}</p>
+            <Tooltip label={dayjs(dateCreate).format(`${DEFAULT_DATE_FORMAT} HH:mm:ss`)}>
+              <p>{dayjs(dateCreate).format(DEFAULT_DATE_FORMAT)}</p>
             </Tooltip>
           )}
         </p>
@@ -143,7 +130,7 @@ export const OrderCarCard: FC<OrderCarCardProps> = ({ order, href, loading }) =>
               className={cn('text-center source-mobile-text', classNameStatus)}
               childrenClassName={cn({ 'flex gap-2': isNeedToPayUser })}
             >
-              {getRowStatus()}
+              {getOrderStatus(t, status)}
             </TrancateContainer>
           )}
           {loading ? <Skeleton className='!w-5 h-5' /> : <HelpMenuCard className='!justify-end' />}
@@ -151,8 +138,12 @@ export const OrderCarCard: FC<OrderCarCardProps> = ({ order, href, loading }) =>
         {loading ? (
           <Skeleton className='max-main:!hidden' />
         ) : (
-          <TrancateContainer maxWidth={145} className={cn('text-center hidden main:inline', classNameStatus)}>
-            {getRowStatus()}
+          <TrancateContainer
+            maxWidth={145}
+            className='text-center hidden main:inline'
+            childrenClassName={cn(classNameStatus)}
+          >
+            {getOrderStatus(t, status)}
           </TrancateContainer>
         )}
         {loading ? <Skeleton className='!w-5 h-5 max-main:!hidden' /> : <HelpMenuCard className='hidden main:!block' />}

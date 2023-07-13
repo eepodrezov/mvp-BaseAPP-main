@@ -129,3 +129,5 @@ export const PLACEHOLDER_MOBILE_PHONE = '+7(___)-___-__-__'
 export const PLACEHOLDER_DATE = '__.__.____'
 
 export const HEADER_COLUMNS_NAME = ['RegistrationDate', 'enginePower', 'engineVolume', 'Deal start', 'Stage', 'Status']
+
+export const UNDEFINED_TYPE_COLOR = 'Undefined'

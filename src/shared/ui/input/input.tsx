@@ -29,6 +29,7 @@ export const InputComponent = <T extends InputType>(
     open = false,
     withoutSpace = true,
     isRequired,
+    canStartWithNull = false,
     ...rest
   }: InputProps<T>,
   ref: ForwardedRef<HTMLInputElement>
@@ -68,7 +69,7 @@ export const InputComponent = <T extends InputType>(
 
   const filterValue = (value: string) => {
     if (rest.maxLength) return getTrimmedString(value.trim(), 0, rest.maxLength)
-    if (type === 'number' && value.startsWith('0') && isFilters) return value.slice(1)
+    if (type === 'number' && value.startsWith('0') && isFilters && !canStartWithNull) return value.slice(1)
     if (withoutSpace) return value.trim()
     return value
   }
@@ -154,7 +155,7 @@ export const InputComponent = <T extends InputType>(
               ;(rest.onChange as onChangeInput)?.(e)
               setValue(e.target.value)
             }}
-            placeholder={placeholder && `${placeholder} ${labelSuffix}`}
+            placeholder={`${placeholder} ${labelSuffix}`}
             autoComplete={type === 'password' ? 'new-password' : 'off'}
           />
         )}

@@ -1,32 +1,12 @@
 variables:
-  DEV_USER: gitlab
-  DEV_HOST: 162.62.119.109
+  DEV_USER: webant
   DEV_FOLDER: /var/www/ant-car/
   CONTAINER_REGISTRY_PATH: frontend
 
 stages:
-  - test
   - build
   - deploy
-
-test:
-  stage: test
-  image: node:latest
-  tags:
-    - docker-shell
-  only: 
-    - dev
-    - infra/ci-cd
-    - infra/fix
-  cache:
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-    paths:
-      - .yarn
-  before_script:
-      - yarn install --frozen-lockfile --prefer-offline --cache-folder .yarn
-  script:
-      - yarn chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --exit-zero-on-changes
-
+  - test
 
 build:
   stage: build
@@ -46,7 +26,7 @@ build:
      export IFS=''
      export DATE=$(TZ='Europe/Moscow' date +%m.%dT%H.%M)
      /kaniko/executor \
-      --build-arg "NEXT_PUBLIC_SPRINT_NUMBER=$NEXT_PUBLIC_SPRINT_NUMBER" \
+      --build-arg "NEXT_PUBLIC_SPRINT_NUMBER=d8" \
       --build-arg "NEXT_PUBLIC_DATE_STAMP=$DATE" \
       --build-arg "NEXT_PUBLIC_TARGET=$NEXT_PUBLIC_TARGET" \
       --build-arg "NEXT_PUBLIC_TOKEN_PATH=$NEXT_PUBLIC_TOKEN_PATH" \
@@ -56,6 +36,10 @@ build:
       --build-arg "NEXT_PUBLIC_COMPANY_PHONE_NUMBER=$NEXT_PUBLIC_COMPANY_PHONE_NUMBER" \
       --build-arg "NEXT_PUBLIC_CLIENT_ID=$NEXT_PUBLIC_CLIENT_ID" \
       --build-arg "NEXT_PUBLIC_CLIENT_SECRET=$NEXT_PUBLIC_CLIENT_SECRET" \
+      --build-arg "NEXT_PUBLIC_DELIVERY_TIME=$NEXT_PUBLIC_DELIVERY_TIME" \
+      --build-arg "NEXT_PUBLIC_DELIVERY_TIME_RU=$NEXT_PUBLIC_DELIVERY_TIME_RU" \
+      --build-arg "NEXT_PUBLIC_SOCIAL_CONTACTS=$NEXT_PUBLIC_SOCIAL_CONTACTS" \
+      --build-arg "NEXT_PUBLIC_TECHNICAL_SUPPORT=$NEXT_PUBLIC_TECHNICAL_SUPPORT" \
       --target prod \
       --context $CI_PROJECT_DIR \
       --dockerfile $CI_PROJECT_DIR/Dockerfile-ci \
@@ -72,9 +56,29 @@ deploy:
   script:
     - chmod og= $id_rsa
     - apk update && apk add openssh-client
-    - ssh -i $id_rsa -o StrictHostKeyChecking=no $DEV_USER@$DEV_HOST "cd $DEV_FOLDER && docker-compose pull frontend && docker-compose up -d frontend"
+    - ssh -i $id_rsa -o StrictHostKeyChecking=no $DEV_USER@$HOST_DEV2 "cd $DEV_FOLDER && docker-compose pull frontend && docker-compose up -d frontend"
   only: 
     - dev
     - infra/ci-cd
   after_script:
     - exit
+
+
+test:
+  stage: test
+  image: node:latest
+  tags:
+    - docker-shell
+  only: 
+    - infra/ci-cd
+    - infra/fix
+  cache:
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - .yarn
+  before_script:
+      - yarn install --frozen-lockfile --prefer-offline --cache-folder .yarn
+  script:
+      - yarn chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --exit-zero-on-changes
+
+

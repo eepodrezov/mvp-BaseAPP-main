@@ -9,6 +9,7 @@ import {
   Color,
   Car,
   getCarColorText,
+  CAR_TYPE_WARRANTY_CONSTANTS_KEYS,
 } from '../../lib'
 import { FCWithClassName, TFunction } from '@/shared/@types'
 import { Disclosure, Transition } from '@headlessui/react'
@@ -18,6 +19,7 @@ import { Button } from '@/shared/ui'
 import { normalizeArrayToSeparatedString } from '@/shared/helpers'
 import { getNumberWithDevider } from '@/shared/helpers'
 import { InfoRow } from '@/shared/ui'
+import { DELIVERY_TIME_RU, DELIVERY_TIME } from '@/shared/config'
 
 export interface CarDescriptionProps {
   car: Car
@@ -58,6 +60,7 @@ const carDescriptionOptions = [
   { field: 'interiorColors' },
   { field: 'interiorMaterials' },
   { field: 'aditionalElements' },
+  { field: 'warranty', elementKeys: CAR_TYPE_WARRANTY_CONSTANTS_KEYS },
 ] as DescriptionOption[]
 
 export const CarDescription: FCWithClassName<CarDescriptionProps> = ({ car, className }) => {
@@ -68,21 +71,23 @@ export const CarDescription: FCWithClassName<CarDescriptionProps> = ({ car, clas
     if (option.manufactureFieldNum === 2) return car?.manufacturer?.name
     if (option.field === 'model') return car.model?.name
     if (option.field === 'brand') return car.brand?.name
-    if (option.field === 'bodyType') return car.bodyType?.name
+    if (option.field === 'bodyType') return t(car.bodyType?.name)
     if (option.field === 'dealer') return car.dealer?.name
     if (option.field === 'enginePower') return `${car.enginePower} ${t('HP')}`
     if (option.field === 'mileage') return `${getNumberWithDevider(car.mileage, ' ')} ${t('km')}`
     if (option.field === 'location')
       return normalizeArrayToSeparatedString([car?.location?.country.name, car?.location?.city], ', ')
     if (option.field === 'exteriorColors')
-      return getCarColorText(car.colors?.filter(color => color.type === 1) as Color[])
+      return t(getCarColorText(car.colors?.filter(color => color.type === 1) as Color[]))
     if (option.field === 'interiorColors')
-      return getCarColorText(car.colors?.filter(color => color.type === 0) as Color[])
+      return t(getCarColorText(car.colors?.filter(color => color.type === 0) as Color[]))
     if (option.field === 'engineVolume') return `${car?.literEngineVolume} ${t('L')}`
     if (option.field === 'deliveryTime') {
-      // TODO временное значение
-      const deliveryTimeMock = 120
-      return `${t('from')} ${deliveryTimeMock} ${t('days')}`
+      return (
+        (car?.location?.country?.name === 'Таможенный Союз'
+          ? `${DELIVERY_TIME_RU} `
+          : `${t('car:from')} ${DELIVERY_TIME} `) + t('car:days')
+      )
     }
     if (option.field === 'firstRegDate' && carFieldValue) return new Date(carFieldValue as string).getFullYear()
     if (option.field === 'year' && carFieldValue === 0) return new Date(car.firstRegDate).getFullYear()
@@ -103,8 +108,8 @@ export const CarDescription: FCWithClassName<CarDescriptionProps> = ({ car, clas
 
   return (
     <div className={className}>
-      <div className='hidden desktop:block mb-10'>
-        <div className='croogla-secondary-text desktop:croogla-sub-title'>{t('Full Description')}</div>
+      <div className='hidden tablet:block mb-10'>
+        <div className='croogla-secondary-text tablet:croogla-sub-title'>{t('Full Description')}</div>
         <div className='mt-10 columns-3 gap-y-5 gap-x-[90px]'>
           {carDescriptionOptions.map((option: DescriptionOption, index) => (
             <InfoRow
@@ -116,8 +121,14 @@ export const CarDescription: FCWithClassName<CarDescriptionProps> = ({ car, clas
             />
           ))}
         </div>
+        {car.additionalInformation && (
+          <div className='flex flex-col gap-5 w-full max-w-[850px] mt-10'>
+            <h2 className='source-text'>{t('additionalInformation')}</h2>
+            <p className='source-secondary-title text-black'>{car.additionalInformation}</p>
+          </div>
+        )}
       </div>
-      <div className='desktop:hidden'>
+      <div className='tablet:hidden'>
         <Disclosure>
           {({ open }) => (
             <>
@@ -152,6 +163,12 @@ export const CarDescription: FCWithClassName<CarDescriptionProps> = ({ car, clas
                       tooltipText={getTooltipText(option, t)}
                     />
                   ))}
+                  {car.additionalInformation && (
+                    <div className='flex flex-col gap-base w-full max-w-[850px] mt-small'>
+                      <h2 className='source-text'>{t('additionalInformation')}</h2>
+                      <p className='source-mobile-title text-black'>{car.additionalInformation}</p>
+                    </div>
+                  )}
                 </Disclosure.Panel>
               </Transition>
             </>

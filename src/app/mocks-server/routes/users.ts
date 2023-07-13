@@ -3,9 +3,11 @@ import {
   CURRENT_VIEWER_CHANGE_PASSWORD_REQUEST_TARGET,
   CURRENT_VIEWER_ID_REQUEST_TARGET,
   CURRENT_VIEWER_REQUEST_TARGET,
+  CURRENT_VIEWER_RESET_PASSWORD_TARGET,
   CURRENT_VIEWER_SETTINGS_REQUEST_TARGET,
   USERS_COLLECTION_SETTINGS_REQUEST_TARGET,
   USERS_REQUEST_TARGET,
+  PASSWORD_RECOVERY_REQUEST_TARGET,
 } from '@/entities/viewer'
 import { USER_ENTITY_MOCK, USER_NOTIFICATION_MOCK } from '@/shared/config'
 import { getSingleRequestTarget } from '@/shared/lib'
@@ -37,5 +39,11 @@ export const users = [
   }),
   rest.post(addBaseDataURL(CURRENT_VIEWER_CALLBACK_REQUEST_TARGET), (_, res, ctx) => {
     return res(ctx.status(200), ctx.json(Mock.mock(USER_ENTITY_MOCK)))
+  }),
+  rest.post(addBaseDataURL(PASSWORD_RECOVERY_REQUEST_TARGET), (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json({ message: 'ok' }))
+  }),
+  rest.put(addBaseDataURL(CURRENT_VIEWER_RESET_PASSWORD_TARGET), (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json({ message: 'ok' }))
   }),
 ]

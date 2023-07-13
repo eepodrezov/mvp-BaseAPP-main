@@ -1,2 +1,3 @@
-export * from './main-layout'
-export * from './catalog-cards-layout'
+export * from './info-page-content-layout'
+export * from './content-layout'
+export * from './profile-layout'

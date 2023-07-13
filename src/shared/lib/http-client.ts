@@ -5,7 +5,6 @@ import { authRequest, ResponseAuth } from './auth-request'
 import _ from 'lodash'
 import { GetServerSidePropsContext, PreviewData } from 'next'
 import { ParsedUrlQuery } from 'querystring'
-import { Nullable } from '../@types'
 
 interface Context {
   ctx?: ContextRequest
@@ -23,7 +22,6 @@ type ConfigRequest<D = undefined> = AxiosRequestConfig<D> & Context
 
 let isRefreshing = false
 let requestQueue: Request[] = []
-let requestCurrent: Nullable<Request> = null
 
 const instance: AxiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -33,8 +31,8 @@ instance.interceptors.request.use(requestInterceptor)
 instance.interceptors.response.use(config => config, responseInterceptor)
 
 export const getTokens = (ctx?: ContextRequest) => {
-  const { access_token, refresh_token } = parseCookies(ctx)
-  return { access_token, refresh_token }
+  const { access_token, refresh_token, fingerprint } = parseCookies(ctx)
+  return { access_token, refresh_token, fingerprint }
 }
 
 export const setCookieTokens = (data: ResponseAuth) => {
@@ -48,18 +46,29 @@ const DEFAULT_AXIOS_HEADERS = {
   'Cache-Control': 'no-cache',
 }
 
-const clearRequests = () => [(requestQueue = []), (requestCurrent = null)]
-
 const requestTokens = _.debounce(
   (refresh_token: string) =>
     authRequest(refresh_token)
-      .then(res => setCookieTokens(res.data))
+      .then(
+        res => setCookieTokens(res.data),
+        err => {
+          const error = err as AxiosError<any>
+          const message = error.response?.data?.message
+          if (message === 'The refresh token is invalid.') {
+            destroyCookie(null, 'refresh_token', { path: '/' })
+            window.history.pushState(null, '', '/')
+            window.location.reload()
+            return Promise.reject(error)
+          }
+          return Promise.resolve()
+        }
+      )
       .then(() => {
         isRefreshing = false
         Promise.allSettled(
           requestQueue.map(({ config, reject, resolve }) => httpClient(config).then(resolve).catch(reject))
         )
-        clearRequests()
+        requestQueue = []
       }),
   300
 )
@@ -70,15 +79,10 @@ async function responseInterceptor(error: AxiosError<any>) {
   if (error.response?.status === 401 && refresh_token) {
     destroyCookie(null, 'access_token', { path: '/' })
 
-    if (error.config.url === '/users/current')
-      new Promise((resolve, reject) => (requestCurrent = { resolve, reject, config: error.config, error }))
-
     if (error.response?.data?.message === 'The refresh token is invalid.') {
       destroyCookie(null, 'refresh_token', { path: '/' })
-      requestCurrent?.reject(requestCurrent?.error)
-      clearRequests()
 
-      return
+      return Promise.reject(error)
     }
 
     isRefreshing = true
@@ -109,13 +113,4 @@ async function requestInterceptor(config: ConfigRequest) {
   return config
 }
 
-export const httpClient = <T, D = undefined>(config: ConfigRequest<D>): Promise<AxiosResponse<T, D>> => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const response = await instance(config)
-      resolve(response)
-    } catch (error) {
-      reject(error)
-    }
-  })
-}
+export const httpClient = <T, D = undefined>(config: ConfigRequest<D>): Promise<AxiosResponse<T, D>> => instance(config)

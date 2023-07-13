@@ -14,4 +14,5 @@ export interface Delivery extends BaseEntity {
     domesticDelivery: number
   }
   fullPrice: number
+  bookingPrice: number
 }

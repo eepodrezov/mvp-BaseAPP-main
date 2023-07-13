@@ -15,7 +15,7 @@ describe('ColorPaletteTests', () => {
   it('color palette should be change selectedIds on click', () => {
     const { result } = renderHook(() => useState<number[]>([]))
     const { rerender } = render(<Default selectedIds={result.current[0]} onChange={result.current[1]} />)
-    const options = screen.getAllByText('Blue')
+    const options = screen.getAllByTestId('color-option')
     act(() => {
       fireEvent.click(options[0])
     })

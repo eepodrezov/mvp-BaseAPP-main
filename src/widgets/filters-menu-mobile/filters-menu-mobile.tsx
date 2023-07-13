@@ -5,9 +5,9 @@ import {
   CarBrandSelect,
   carCollectionBrand,
   carCollectionPrice,
-  carCollectionYears,
+  carCollectionAge,
   CarPriceRange,
-  CarYearsRange,
+  CarAgeRange,
 } from '@/entities/car'
 import { useTranslate } from '@/shared/lib'
 
@@ -22,8 +22,8 @@ export const FiltersMenuMobile: FC = () => {
         <FiltersFastHand label={`${t('Price')} ₽`} atom={carCollectionPrice}>
           <CarPriceRange />
         </FiltersFastHand>
-        <FiltersFastHand label={t('Age')} atom={carCollectionYears}>
-          <CarYearsRange />
+        <FiltersFastHand label={t('Age')} atom={carCollectionAge}>
+          <CarAgeRange />
         </FiltersFastHand>
         <FiltersFastHand label={t('brand')} atom={carCollectionBrand}>
           <CarBrandSelect />

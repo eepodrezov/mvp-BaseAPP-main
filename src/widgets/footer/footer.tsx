@@ -1,4 +1,4 @@
-import { COMPANY_PHONE_NUMBER, LANG_RU, PROJECT_VERSION } from '@/shared/config'
+import { LANG_RU, COMPANY_PHONE_NUMBER, PROJECT_VERSION } from '@/shared/config'
 import { useModalState, useWindowDimensions } from '@/shared/hooks'
 import { useTranslate } from '@/shared/lib'
 import PhoneIcon from '@/shared/assets/icons/common/phone-icon.svg'
@@ -13,12 +13,12 @@ export const Footer: FCWithClassName = ({ className }) => {
   const { onOpen: onOpenCallbackModal } = useModalState(callbackModalAtom)
   const { t } = useTranslate(['common'])
   const links = [
-    { href: '/feedback', label: t('Feedback') },
-    // { href: '/company', label: t('Company') },
-    { href: '/admin', label: t('Company') },
+    // TODO: Возможно понадобится
+    // { href: '/feedback', label: t('Feedback') },
+    { href: '/company', label: t('Company') },
     { href: '/contacts', label: t('Contacts') },
-    { href: '/returnAndExchange', label: t('Return&Exchange') },
-    { href: '/privacyPolicy', label: t('Privacy Policy') },
+    { href: '/returnandexchange', label: t('Return&Exchange') },
+    { href: '/privacypolicy', label: t('Privacy Policy') },
   ]
   // TODO:Добавить ссылки
   const buttonsLink: { type: ButtonSocialType; link: string }[] = [
@@ -30,6 +30,8 @@ export const Footer: FCWithClassName = ({ className }) => {
   const { isTablet } = useWindowDimensions()
   const { locale, pathname } = useRouter()
   const withoutCallbackButton = pathname === '/'
+  const PHONES_ARRAY = COMPANY_PHONE_NUMBER.split(',')
+
   return (
     <footer className={cn('w-full bg-black', className)}>
       <div
@@ -41,25 +43,35 @@ export const Footer: FCWithClassName = ({ className }) => {
           }
         )}
       >
-        <div className='flex max-[500px]:flex-col-reverse flex-col gap-large'>
+        <div className='flex max-[500px]:w-full max-[500px]:flex-col-reverse flex-col gap-large'>
           <div
-            className={cn('flex max-[500px]:flex-col items-start flex-row gap-large', {
-              'min-[1400px]:whitespace-nowrap': locale === LANG_RU,
+            className={cn('flex flex-wrap max-[500px]:justify-between items-start flex-row gap-large', {
+              'min-[1400px]:whitespace-nowrap flex-nowrap': locale === LANG_RU,
             })}
           >
             <a onClick={onOpenCallbackModal} className={cn('dark-link text-xl', { hidden: withoutCallbackButton })}>
               {t('callback')}
             </a>
-            <Button
-              variant='text-gray'
-              childrenClassName='flex gap-small items-center font-bold source-text'
-              href={`tel:${COMPANY_PHONE_NUMBER}`}
+            <div
+              className={cn(
+                'flex flex-wrap max-[500px]:flex-col gap-x-large gap-y-small max-[500px]:gap-y-base justify-end max-[500px]:justify-start max-[875px]:justify-end',
+                { 'main:justify-start': locale === LANG_RU }
+              )}
             >
-              <PhoneIcon className='fill-currentColor' />
-              {COMPANY_PHONE_NUMBER}
-            </Button>
+              {PHONES_ARRAY.map((phone, index) => (
+                <Button
+                  key={index}
+                  variant='text-gray'
+                  childrenClassName='flex gap-small items-center font-bold source-text whitespace-nowrap'
+                  href={`tel:${phone}`}
+                >
+                  <PhoneIcon className='fill-currentColor' />
+                  {phone}
+                </Button>
+              ))}
+            </div>
           </div>
-          <div className='flex gap-[53px] desktop:gap-large'>
+          <div className='flex max-[500px]:justify-between desktop:gap-large'>
             {buttonsLink.map(({ link, type }) => (
               <ButtonSocial key={type} type={type} link={link} />
             ))}
@@ -74,7 +86,7 @@ export const Footer: FCWithClassName = ({ className }) => {
           >
             {links.map(({ label, href }) => (
               <Link key={href} href={href}>
-                <a className='dark-link text-xl'>{label}</a>
+                <a className='dark-link text-xl whitespace-nowrap'>{label}</a>
               </Link>
             ))}
           </div>
@@ -84,7 +96,7 @@ export const Footer: FCWithClassName = ({ className }) => {
             })}
           >
             {t('©™ ANTCAR Internet Services, LLC. All rights reserved. Developed by Webant LLC ')}
-            <p className='whitespace-nowrap'>{`v-${PROJECT_VERSION}`}</p>
+            <span className='whitespace-nowrap'>{`v-${PROJECT_VERSION}`}</span>
           </p>
         </div>
       </div>

@@ -1,11 +1,14 @@
+import { Random } from 'mockjs'
+
 // Изменить в зависимости от бэка
 export const IMAGE_ENTITY_MOCK = {
   'id|+1': 1,
   name: 'test-file.png',
   originalName: 'test-file.png',
-  path: 'https://dummyimage.com/266x200.png',
-  pathS3: 'https://dummyimage.com/266x200.png',
-  url: 'https://dummyimage.com/266x200.png',
+  'orderIndex|1-12': 1,
+  path: 'https://dummyimage.com/900x600.png',
+  pathS3: 'https://dummyimage.com/900x600.png',
+  url: 'https://dummyimage.com/900x600.png',
   dateCreate: '2022-03-11T12:21:53.553Z',
   dateUpdate: '2022-03-11T12:21:53.553Z',
   loading: false,
@@ -15,9 +18,10 @@ export const IMAGE_ENTITY_MOCK_WITH_TEXT = {
   'id|+1': 1,
   name: 'test-file.png',
   originalName: 'test-file.png',
+  'orderIndex|1-12': 1,
   //чтобы изображения отличались визуально
-  pathS3: 'https://dummyimage.com/266x200.png&text=@title(1)',
-  url: 'https://dummyimage.com/266x200.png&text=@title(1)',
+  pathS3: 'https://dummyimage.com/900x600.png&text=@title(1)',
+  url: 'https://dummyimage.com/900x600.png&text=@title(1)',
   dateCreate: '2022-03-11T12:21:53.553Z',
   dateUpdate: '2022-03-11T12:21:53.553Z',
   loading: false,
@@ -38,10 +42,16 @@ export const FILE_ENTITY_MOCK = {
 export const COLOR_ENTITY_MOCK = {
   'id|+1': 1,
   name: '@title(2)',
-  hex: '@hex',
+  hex: '4285F4',
   'models|10': [/\/models\/[0-9]/],
   'cars|10': [/\/autos\/[0-9]/],
   'type|0-1': 0,
+}
+
+export const MATERIAL_ENTITY_MOCK = {
+  'id|+1': 1,
+  name: '@title(2)',
+  assetPath: Random.image(),
 }
 
 // TODO: Поправить, когда будет понятно по бэку
@@ -101,6 +111,7 @@ export const CAR_ENTITY_MOCK = {
   'ecoType|0-5': 0,
   interiorMaterials: '@title(2)',
   'additionalCharacteristics|3': ['string|0-10000000'],
+  additionalInformation: '@title(20)',
 }
 
 export const CAR_FILTER_DATA_ENTITY_MOCK = {

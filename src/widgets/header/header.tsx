@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import { COMPANY_PHONE_NUMBER } from '@/shared/config'
 import { Button } from '@/shared/ui'
-import HeaderLogo from '@/shared/assets/icons/common/header-logo.svg'
 import { ChangeLanguageButton, useTranslate } from '@/shared/lib'
+import { HeaderLogo } from '@/shared/ui/header-logo'
 import PhoneMenuIcon from '@/shared/assets/icons/common/phone-icon.svg'
 import { useModalState } from '@/shared/hooks'
 import { signInModalAtom } from '@/features/auth/basic'
@@ -11,6 +11,7 @@ import { useAtomValue } from 'jotai'
 import Link from 'next/link'
 import cn from 'classnames'
 import { useRouter } from 'next/router'
+import { SocialButtons } from '@/shared/ui/social-buttons/social-buttons'
 
 export interface HeaderProps {
   isProfileHeader?: boolean
@@ -23,9 +24,10 @@ export const Header: FC<HeaderProps> = ({ isProfileHeader }) => {
   const viewer = useAtomValue(viewerAtom)
   const router = useRouter()
   const withoutCallbackButton = router.pathname === '/'
+  const PHONES_ARRAY = COMPANY_PHONE_NUMBER.split(',')
   return (
     <header
-      className={cn('sticky bg-white top-0 border-b border-black z-20 hidden tablet:flex h-[108px] w-full', {
+      className={cn('sticky bg-white top-0 border-b border-black z-20 hidden min-[1280px]:flex h-[108px] w-full', {
         'h-[84px]': isProfileHeader,
       })}
     >
@@ -49,18 +51,16 @@ export const Header: FC<HeaderProps> = ({ isProfileHeader }) => {
             />
           </a>
         </Link>
-        <div className='flex gap-[41px]'>
-          <Button variant='text' className='text-lg source-mobile-title' href={`tel:${COMPANY_PHONE_NUMBER}`}>
-            {COMPANY_PHONE_NUMBER}
-          </Button>
+        <div className='flex gap-[41px] items-center'>
           <div className='flex gap-5'>
+            <SocialButtons />
             <Button
               variant='secondary'
-              className={cn({ hidden: withoutCallbackButton })}
+              className={cn('whitespace-nowrap', { hidden: withoutCallbackButton })}
               childrenClassName='flex items-center gap-small'
               onClick={onOpenCallbackModal}
             >
-              <PhoneMenuIcon className='fill-currentColor w-[30px]' />
+              <PhoneMenuIcon className='fill-currentColor min-[1280px]:w-[30px]' />
               {t('callback')}
             </Button>
             {viewer ? <UserMenu /> : <Button onClick={onOpenSignInModal}>{t('Sign In')}</Button>}

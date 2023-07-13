@@ -3,12 +3,15 @@ import { Form, useTranslate } from '@/shared/lib'
 import { Button, ButtonMobileFixedWrapper, Checkbox } from '@/shared/ui'
 import { useRouter } from 'next/router'
 import { payBookingShema, serverSideBookingPayValidation } from '../../lib'
-import { COMPANY_PHONE_NUMBER } from '@/shared/config'
+import { TECHNICAL_SUPPORT } from '@/shared/config'
 import cn from 'classnames'
 import Link from 'next/link'
 import AlertIcon from '@/shared/assets/icons/common/alert.svg'
 import PhoneIcon from '@/shared/assets/icons/common/phone.svg'
 import { FCWithClassName } from '@/shared/@types'
+import { useAtomValue } from 'jotai'
+import { bookingCarPriceAtom } from '@/features/delivery'
+import { getCarPrice } from '@/entities/car'
 
 export interface BookingPaymentProps {
   orderId?: number
@@ -18,13 +21,14 @@ export interface BookingPaymentProps {
 export const BookingPayment: FCWithClassName<BookingPaymentProps> = ({ orderId, disabled, className }) => {
   const { t } = useTranslate(['common', 'booking'])
   const router = useRouter()
+  const bookingCarPrice = useAtomValue(bookingCarPriceAtom)
 
   const { mutate, isLoading } = usePayOrder({
     onSuccess: data => router.push(data.paymentURL),
     onError: error => serverSideBookingPayValidation(t, error),
   })
 
-  const bookingButtonText = `${t('booking:Booking')} ${t('for')} 30,000 ${t('RUB')}`
+  const bookingButtonText = `${t('booking:Booking')} ${t('for')} ${getCarPrice(bookingCarPrice)} ${t('RUB')}`
 
   return (
     <Form
@@ -86,7 +90,7 @@ export const BookingPayment: FCWithClassName<BookingPaymentProps> = ({ orderId, 
             <PhoneIcon className='flex-shrink-0 stroke-black' />
             <span>
               {t('booking:If_you_have_any_questions_please_contact_our_Customer_support')}{' '}
-              <span className='source-secondary-title'>{COMPANY_PHONE_NUMBER}</span>
+              <span className='source-secondary-title'>{TECHNICAL_SUPPORT || ''}</span>
             </span>
           </p>
           <p className='text-text'>* {t('booking:The_price_is_not_a_public_offer')}</p>

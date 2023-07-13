@@ -31,6 +31,7 @@ export interface InputProps<T extends InputType = 'text'>
   withoutSpace?: boolean
   onChange?: onChangeReturnType<T>
   isRequired?: boolean
+  canStartWithNull?: boolean
 }
 
 export interface SuffixIconProps {

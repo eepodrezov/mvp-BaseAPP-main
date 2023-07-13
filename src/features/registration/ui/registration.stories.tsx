@@ -1,12 +1,12 @@
 import {
   confirmEmailModalAtom,
-  ConfirmRegistrationEmail,
+  ConfirmEmail,
   signInModalAtom,
   BasicAuthForm,
   confirmPhoneModalAtom,
-  ConfirmRegistrationPhone,
-  confirmedRegistrationModalAtom,
-  ConfirmedRegistration,
+  ConfirmPhone,
+  confirmedModalAtom,
+  Confirmed,
 } from '@/features'
 import { useModalState } from '@/shared/hooks'
 import { NotificationModal, useTranslate } from '@/shared/lib'
@@ -31,7 +31,7 @@ const Template: Story = args => {
   const { isOpen: isOpenConfirmEmailModal, onClose: onCloseConfirmEmailModal } = useModalState(confirmEmailModalAtom)
   const { isOpen: isOpenConfirmPhoneModal, onClose: onCloseConfirmPhoneModal } = useModalState(confirmPhoneModalAtom)
   const { isOpen: isOpenConfirmedRegistrationModal, onClose: onCloseConfirmedRegistrationModal } =
-    useModalState(confirmedRegistrationModalAtom)
+    useModalState(confirmedModalAtom)
   return (
     <>
       <Button variant='text' onClick={onOpenRegistrationModal}>
@@ -44,13 +44,13 @@ const Template: Story = args => {
         <BasicAuthForm />
       </Modal>
       <Modal isOpen={isOpenConfirmEmailModal} onClose={onCloseConfirmEmailModal}>
-        <ConfirmRegistrationEmail />
+        <ConfirmEmail />
       </Modal>
       <Modal isOpen={isOpenConfirmPhoneModal} onClose={onCloseConfirmPhoneModal}>
-        <ConfirmRegistrationPhone />
+        <ConfirmPhone />
       </Modal>
       <Modal isOpen={isOpenConfirmedRegistrationModal} onClose={onCloseConfirmedRegistrationModal}>
-        <ConfirmedRegistration />
+        <Confirmed />
       </Modal>
       <NotificationModal />
     </>

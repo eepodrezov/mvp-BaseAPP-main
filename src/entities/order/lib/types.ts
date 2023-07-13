@@ -1,6 +1,6 @@
 import { ProfileCar } from '@/entities/car'
 import { User } from '@/entities/viewer'
-import { BaseEntity } from '@/shared/@types'
+import { BaseEntity, FileModel } from '@/shared/@types'
 import {
   STATUS_BOOKING_CANCELLATION_BY_MANAGER,
   STATUS_BOOKING_CANCELLATION_BY_USER,
@@ -101,21 +101,24 @@ export interface OrderCars extends BaseEntity {
   orders: OrderCar[]
 }
 export interface OrderCar extends BaseEntity {
-  currentStep: Step & { currentStatus: Status }
+  currentStep: Step & { currentStatus: Status; type: StepType }
   car: ProfileCar
 }
 export interface Step extends BaseEntity {
-  type: StepType
+  currentStatus?: BaseEntity & { status: PaymentStatus }
+  type?: StepType
 }
 export interface Status extends BaseEntity {
   status: PaymentStatus
+  type: number
 }
 export interface Order extends BaseEntity {
   user: User | string
   startDate: string
   endDate: string
   car: BaseEntity
-  steps: Step
+  steps: Step[]
+  currentStep: BaseEntity
   status: PaymentStatus
   payments: (Payment | string)[]
   pay: boolean
@@ -132,4 +135,14 @@ export interface Payment extends BaseEntity {
   externalId: string
   errorMessage: string
   paymentURL: string
+}
+
+export interface Documents extends BaseEntity {
+  name: string
+  file: Pick<FileModel, 'pathS3' | 'id'>
+}
+
+export interface PaymentInstruction extends BaseEntity {
+  version: string
+  file: Pick<FileModel, 'pathS3' | 'id'>
 }

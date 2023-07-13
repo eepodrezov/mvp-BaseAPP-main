@@ -6,9 +6,11 @@ import { User, USER_CREATE_PRIMARY_KEY } from '@/entities/viewer'
 
 export const useRegistration = (
   options?: Omit<UseMutationOptions<User, AxiosError, RequestRegistrationTypes>, 'mutationFn'>,
-  config?: AxiosRequestConfig
-) =>
-  useMutation(data => queryFetchRegistration(data)(config)(), {
+  config?: AxiosRequestConfig,
+  fingerprint?: string
+) => {
+  return useMutation(data => queryFetchRegistration({ ...data, fingerprint: fingerprint })(config)(), {
     ...options,
     mutationKey: USER_CREATE_PRIMARY_KEY,
   })
+}

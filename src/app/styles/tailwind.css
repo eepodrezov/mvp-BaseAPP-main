@@ -72,22 +72,25 @@
     @apply font-source text-2xl leading-[30px];
   }
 
-  /* Inter */
-  h1 {
-    @apply font-source text-[1rem] leading-[30px] font-bold;
-  }
-  h2 {
-    @apply font-source text-[0.875rem] leading-[150%] font-bold;
-  }
-  .p1 {
-    @apply font-source text-[1rem] leading-[135%] font-medium;
-  }
-  .p2 {
-    @apply font-source text-[0.875rem] leading-[150%] font-medium;
-  }
-  .p3 {
-    @apply font-source text-[0.875rem] leading-[150%] font-medium;
-  }
+    /* Заголовки */
+    h1 {
+      @apply font-croogla text-4xl leading-[120%];
+    }
+    h2{
+      @apply font-croogla text-[2.125rem] leading-[120%];
+    }
+    h3 {
+      @apply font-croogla text-[1.75rem] leading-[120%];
+    }
+    h4 {
+      @apply font-croogla text-2xl leading-[120%];
+    }
+    h5 {
+      @apply font-croogla text-[1.375rem] leading-[120%];
+    }
+    h6 {
+      @apply font-croogla text-xl leading-[120%];
+    }
 }
 
 @layer components {

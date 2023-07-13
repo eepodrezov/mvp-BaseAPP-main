@@ -16,6 +16,7 @@ import {
 } from '@/features'
 import { PHONE_REG_EXP } from '@/shared/config'
 import _ from 'lodash'
+import { passwordRecoveryUsernameModalAtom } from '@/entities/viewer'
 
 type FormFieldAuth = {
   username: string
@@ -31,6 +32,7 @@ export const BasicAuthForm: FC = () => {
   const setPhoneConfirm = useUpdateAtom(registrationPhoneAtom)
   const { onOpen: onOpenConfirmEmailModal } = useModalState(confirmEmailModalAtom)
   const { onOpen: onOpenConfirmPhoneModal } = useModalState(confirmPhoneModalAtom)
+  const { onOpen: onOpenPasswordRecoveryModal } = useModalState(passwordRecoveryUsernameModalAtom)
 
   const { mutate } = useResendActivationCode({
     onError: error => serverSideConfirmCodeValidation(t, error),
@@ -80,7 +82,17 @@ export const BasicAuthForm: FC = () => {
             <Input label={t('login')} name='username' placeholder={t('placeholderLogin')} />
             <div className='flex flex-col items-end gap-small'>
               <Input label={t('password')} name='password' placeholder={t('password')} type='password' />
-              <a className='cursor-pointer text-red'>{t('forgotPassword')}</a>
+              <a
+                className='cursor-pointer text-red'
+                onClick={() => {
+                  onClose()
+                  setTimeout(() => {
+                    onOpenPasswordRecoveryModal()
+                  }, 400)
+                }}
+              >
+                {t('forgotPassword')}
+              </a>
             </div>
             <div className='w-full flex gap-[23px] justify-end'>
               <Button variant='text' className='!w-[85px]' onClick={onClose} data-testid='closeButton'>

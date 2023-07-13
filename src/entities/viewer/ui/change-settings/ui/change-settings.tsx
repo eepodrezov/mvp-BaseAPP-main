@@ -10,7 +10,7 @@ export const ChangeSettings: FC = () => {
   const { t } = useTranslate(['profile'])
   const [emailLoading, setEmailLoading] = useState(true)
   const [smsLoading, setSmsLoading] = useState(false)
-  const [telegramlLoading, setTelegramLoading] = useState(false)
+  // const [telegramlLoading, setTelegramLoading] = useState(false)
 
   const { data, isLoading, refetch } = useSettingsCollection(viewer!.id, {
     enabled: !!viewer,
@@ -20,7 +20,7 @@ export const ChangeSettings: FC = () => {
     onSettled: () => {
       setEmailLoading(false)
       setSmsLoading(false)
-      setTelegramLoading(false)
+      // setTelegramLoading(false)
     },
   })
   const { mutate: update } = useChangeSettings({
@@ -52,7 +52,8 @@ export const ChangeSettings: FC = () => {
             data-testid='email'
           />
         </Tooltip>
-        <Tooltip label={t('Connect account')} placement='right' isActive={!viewer!.telegram}>
+        {/*Скорее всего понадобится
+         <Tooltip label={t('Connect account')} placement='right' isActive={!viewer!.telegram}>
           <Switch
             name='telegram'
             value={data?.items[0]?.telegram}
@@ -69,7 +70,7 @@ export const ChangeSettings: FC = () => {
             loading={isLoading || telegramlLoading}
             data-testid='telegram'
           />
-        </Tooltip>
+        </Tooltip> */}
         <Tooltip label={t('Connect account')} placement='right' isActive={!viewer!.phone}>
           <Switch
             name='sms'

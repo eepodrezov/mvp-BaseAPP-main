@@ -28,7 +28,7 @@ describe('BurgerMenuTests', () => {
       fireEvent.click(screen.getByTestId('iconOpen'))
     })
     act(() => {
-      fireEvent.click(screen.getByTestId('phoneButton'))
+      fireEvent.click(screen.getAllByTestId('phoneButton')[0])
     })
     expect(screen.queryByRole('menu')).not.toBeInTheDocument()
   })

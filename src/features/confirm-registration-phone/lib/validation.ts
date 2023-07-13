@@ -15,7 +15,7 @@ export const serverSideConfirmCodeValidation = (
   isConfirmEmail?: boolean
 ) => {
   switch (error?.response?.data.detail) {
-    case 'код не найден': {
+    case 'Код не найден': {
       setNotificationModalData?.({
         status: 'error',
         payload: isConfirmEmail ? t('The link to activate your account has expired') : t('code not found'),

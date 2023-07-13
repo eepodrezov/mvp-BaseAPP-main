@@ -1,5 +1,0 @@
-export * from './catalog-view'
-export * from './basket-view'
-export * from './recipes-view'
-export * from './list-view'
-export * from './profile-view'

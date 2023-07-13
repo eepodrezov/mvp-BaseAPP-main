@@ -3,6 +3,7 @@ import { useTranslate } from '@/shared/lib'
 import { ColorPalette } from '@/shared/ui'
 import { useAtom } from 'jotai'
 import { carCollectionInteriorColors, useColorInteriorCollection } from '../../model'
+import { FiltersApplyButton } from '@/features'
 
 export const CarInteriorColorPalette: FCWithClassName = ({ className }) => {
   const { t } = useTranslate(['car'])
@@ -13,13 +14,16 @@ export const CarInteriorColorPalette: FCWithClassName = ({ className }) => {
   if (!data?.items?.length) return null
 
   return (
-    <ColorPalette
-      withSelectAll
-      className={className}
-      colors={data?.items || []}
-      selectedIds={interiorColors}
-      onChange={setInteriorColors}
-      selectAllLabel={t('All Interior Color')}
-    />
+    <FiltersApplyButton>
+      <ColorPalette
+        name='color-intrerior'
+        withSelectAll
+        className={className}
+        colors={data?.items || []}
+        selectedIds={interiorColors}
+        onChange={setInteriorColors}
+        selectAllLabel={t('All Interior Colors')}
+      />
+    </FiltersApplyButton>
   )
 }

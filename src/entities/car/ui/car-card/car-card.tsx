@@ -1,6 +1,7 @@
 import { NextImage } from '@/shared/ui/next-image'
 import { ReactElement, useEffect, useMemo, useState } from 'react'
 import GeoLocation from '@/shared/assets/icons/common/geo-location.svg'
+import { Carousel } from '@/shared/ui/carousel'
 import { OptionalLinkWrapper, useTranslate } from '@/shared/lib'
 import {
   CAR_TYPE_DRIVE_CONSTANTS_KEYS,
@@ -8,12 +9,16 @@ import {
   CAR_TYPE_FUEL_CONSTANTS_KEYS,
   CarCollectionItem,
   getCarPriceStr,
+  getSortingImages,
+  getCarYear,
+  getCarPrice,
+  Location,
+  getCarImage,
 } from '../../lib'
 import cn from 'classnames'
 import Skeleton from 'react-loading-skeleton'
 import { normalizeArrayToSeparatedString, getNumberWithDevider } from '@/shared/helpers'
 import { FCWithClassName } from '@/shared/@types'
-import { getCarYear, getCarPrice } from '../../lib'
 import { useFavoritesRequest } from '../../model'
 import { FavoriteButton } from '@/shared/ui'
 import { useModalState, useWindowDimensions } from '@/shared/hooks'
@@ -21,8 +26,10 @@ import { signInModalAtom } from '@/features'
 import { useAtomValue } from 'jotai'
 import { viewerAtom } from '@/entities/viewer'
 
+type CardType = 'catalog' | 'page'
+
 export interface CarCardProps {
-  type: 'catalog' | 'page'
+  type: CardType
   car?: CarCollectionItem
   loading?: boolean
   href?: string
@@ -31,7 +38,7 @@ export interface CarCardProps {
 }
 
 export const CarCard: FCWithClassName<CarCardProps> = ({
-  type,
+  type = 'catalog',
   car,
   isBooking,
   className,
@@ -65,6 +72,15 @@ export const CarCard: FCWithClassName<CarCardProps> = ({
 
   const onFavorite = () => (viewer ? [favorite({ id: car!.id }), setIsFavorite(prev => !prev)] : onOpen())
 
+  const sortingImages = getSortingImages(car?.images)
+
+  function getCarLocationText(location: Location, cardType: CardType): string {
+    if (cardType === 'catalog' && location?.country?.isCustomUnion) {
+      return t('common:Custom_union')
+    }
+    return normalizeArrayToSeparatedString([car?.location?.country?.name, car?.location?.city], ', ')
+  }
+
   return (
     <OptionalLinkWrapper href={href}>
       <div
@@ -83,9 +99,24 @@ export const CarCard: FCWithClassName<CarCardProps> = ({
       >
         <div
           className={cn('w-full pt-5 pl-5 desktop:hidden transition-colors', {
-            'pr-5': !car?.images.length,
+            'pr-5': !sortingImages?.length,
           })}
         >
+          {loading ? (
+            <Skeleton className='!w-[calc(100vw-25px)] h-[200px]' />
+          ) : (
+            <Carousel
+              className={cn({
+                '!w-[calc(100vw-25px)]': sortingImages?.length,
+                '!w-[calc(100vw-45px)]': !sortingImages?.length,
+              })}
+              images={sortingImages}
+              slideWidth={266}
+              slideHeight={200}
+              slideBorderRadius={16}
+              spaceBetween={20}
+            />
+          )}
         </div>
         <div
           className={cn(
@@ -100,7 +131,7 @@ export const CarCard: FCWithClassName<CarCardProps> = ({
             <Skeleton className='h-full' />
           ) : (
             <NextImage
-              src={car?.images[0]?.pathS3}
+              src={getCarImage('big', sortingImages?.[0])}
               className={cn('absolute -top-px -left-px', {
                 'rounded-b-large': type === 'catalog',
                 'rounded-large': type === 'page',
@@ -126,27 +157,25 @@ export const CarCard: FCWithClassName<CarCardProps> = ({
                 >
                   <GeoLocation className='fill-text' />
                   <span className='text-text source-text max-w-[350px] truncate'>
-                    {normalizeArrayToSeparatedString([car?.location?.country?.name, car?.location?.city], ', ')}
+                    {car?.location && getCarLocationText(car.location, type)}
                   </span>
                 </div>
               )}
               {loading ? (
                 <Skeleton className='h-[2.421rem]' />
               ) : (
-                <OptionalLinkWrapper href={href}>
-                  <p
-                    className={cn(
-                      'croogla-secondary-text line-clamp-2 !text-black hover:!text-red transition-colors desktop:max-tablet:line-clamp-3 ',
-                      {
-                        'max-w-[400px] mb-5': type === 'page',
-                        'h-[52px] mb-small': type === 'catalog',
-                        '!text-black hover:!text-black': isBooking,
-                      }
-                    )}
-                  >
-                    {normalizeArrayToSeparatedString([car?.brand.name, car?.model.name], ' ')}
-                  </p>
-                </OptionalLinkWrapper>
+                <p
+                  className={cn(
+                    'croogla-secondary-text line-clamp-2 !text-black hover:!text-red transition-colors desktop:max-tablet:line-clamp-3 ',
+                    {
+                      'max-w-[400px] mb-5': type === 'page',
+                      'h-[52px] mb-small': type === 'catalog',
+                      '!text-black hover:!text-black': isBooking,
+                    }
+                  )}
+                >
+                  {car?.name}
+                </p>
               )}
               {loading ? (
                 <>

@@ -3,15 +3,34 @@ import { useTranslate } from '@/shared/lib'
 import { SelectSearch } from '@/shared/ui'
 import { useAtom } from 'jotai'
 import { useUpdateAtom } from 'jotai/utils'
-import { locationCollectionName, useLocationCollection, carCollectionLocation } from '../../model'
+import {
+  locationCollectionName,
+  useLocationCollection,
+  carCollectionLocation,
+  carCollectionIsCustomUnion,
+} from '../../model'
 import { FCWithClassName } from '@/shared/@types'
 import { FiltersApplyButton } from '@/features'
 
 export const CarLocationSelect: FCWithClassName = ({ className }) => {
-  const { t } = useTranslate(['car'])
+  const { t } = useTranslate(['car', 'common'])
   const { data, isLoading } = useLocationCollection()
   const setName = useUpdateAtom(locationCollectionName)
   const [location, setLocation] = useAtom(carCollectionLocation)
+  const [isCustomUnion, setCustomUnion] = useAtom(carCollectionIsCustomUnion)
+  const customUnionOption = { label: t('common:Custom_union'), id: 'customUnion' }
+
+  function handleChange(option: number | string | null): void {
+    if (option) {
+      if ((option as string) === 'customUnion') {
+        setLocation(null)
+        setCustomUnion(true)
+      } else {
+        setCustomUnion(null)
+        setLocation(option as number)
+      }
+    }
+  }
 
   return (
     <FiltersApplyButton>
@@ -19,11 +38,11 @@ export const CarLocationSelect: FCWithClassName = ({ className }) => {
         showSearch
         name='car-location'
         label={t('Location country')}
-        value={location}
+        value={isCustomUnion ? customUnionOption.id : location}
         className={className}
         isLoading={isLoading}
-        options={normalizeSelectOptions(data?.items, { labelKey: 'name' }, true)}
-        onChange={setLocation}
+        options={[customUnionOption, ...normalizeSelectOptions(data?.items, { labelKey: 'name' }, false)]}
+        onChange={handleChange}
         onSearch={setName}
       />
     </FiltersApplyButton>

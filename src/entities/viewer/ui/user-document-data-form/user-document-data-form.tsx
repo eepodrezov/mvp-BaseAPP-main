@@ -1,7 +1,7 @@
 import { useMemo, FC } from 'react'
 import { useModalState } from '@/shared/hooks'
 import { Form, notify, onSubmit, useTranslate } from '@/shared/lib'
-import { Button } from '@/shared/ui'
+import { Button, Informer } from '@/shared/ui'
 import {
   userDocumentDataModalAtom,
   stepOrderAtom,
@@ -13,7 +13,6 @@ import {
 import { useAtom, useAtomValue } from 'jotai'
 import { UserDocument, Steps, getFormValidationSchema } from '../../lib'
 import { postPassportData } from '../../model/user-document-viewer-request'
-import WarningIcon from '@/shared/assets/icons/common/warning-icon.svg'
 import { passportFormStepsData } from './user-document-form-steps-data'
 import { serverSideValidationUserDocumentCreate } from './lib'
 import { useUpdateAtom } from 'jotai/utils'
@@ -60,16 +59,13 @@ export const UserDocumentDataForm: FC<UserDocumentDataFormProps> = ({ handleClos
   }, [i18n.language, step])
 
   return (
-    <div className='flex flex-col desktop:w-[500px] w-full gap-[23px] select-none'>
+    <div className='flex flex-col desktop:w-[460px] w-full gap-[23px] select-none'>
       <div className='flex items-center justify-between'>
         <h1 className='croogla-secondary-text'>{t('Fill in the data')}</h1>
       </div>
-      <div className='source-secondary-title flex py-2.5 gap-3 font-normal px-3 text-text  justify-center desktop:items-start w-full  bg-gray rounded-xl'>
-        <WarningIcon className='stroke-red' />
-        <p className='w-[calc(100%-36px)]'>
-          {t('This data will be used for customs clearance of the car and filling in the electronic PTS')}
-        </p>
-      </div>
+      <Informer className='mx-auto'>
+        {t('This data will be used for customs clearance of the car and filling in the electronic PTS')}
+      </Informer>
       <Form<UserDocument>
         //@ts-expect-error
         validationSchema={getFormValidationSchema(passportFormStepsData[step - 1].stepFields, t)}

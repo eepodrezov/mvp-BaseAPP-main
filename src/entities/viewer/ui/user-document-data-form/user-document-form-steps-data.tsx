@@ -31,6 +31,7 @@ export const passportFormStepsData: FormStep[] = [
       {
         label: 'seriesAndNumber',
         type: 'number',
+        canStartWithNull: true,
         min: 8,
         max: 15,
       },
@@ -48,6 +49,7 @@ export const passportFormStepsData: FormStep[] = [
         label: 'divisionCode',
         type: 'number',
         postAsNumber: true,
+        canStartWithNull: true,
         max: 10,
       },
     ],
@@ -102,6 +104,7 @@ export const passportFormStepsData: FormStep[] = [
       {
         label: 'inn',
         type: 'number',
+        canStartWithNull: true,
         max: 15,
       },
       {

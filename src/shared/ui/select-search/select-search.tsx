@@ -1,5 +1,5 @@
-import { ForwardedRef, forwardRef, useState } from 'react'
-import RcSelect, { Option, SelectProps as RcSelectProps } from 'rc-select'
+import { ForwardedRef, forwardRef, Ref, useState } from 'react'
+import RcSelect, { BaseSelectRef, Option, SelectProps as RcSelectProps } from 'rc-select'
 import { Nullable, PropsWithClassName, SelectOption } from '@/shared/@types'
 import { useTranslate } from '@/shared/lib'
 import { Input, InputProps } from '../input'
@@ -22,21 +22,24 @@ export interface SelectSearchProps<T> extends Omit<RcSelectProps, 'value' | 'onC
   onChange?: (selected: Nullable<T>) => void
 }
 
-const SelectSearchComponent = <T extends Nullable<string | number>>({
-  open,
-  searchedValue = '',
-  name,
-  label,
-  value,
-  defaultValue,
-  options,
-  inputProps,
-  isLoading,
-  emptyRequestText,
-  onChange,
-  onSearch,
-  ...rest
-}: SelectSearchProps<PropsWithClassName<T>>) => {
+const SelectSearchComponent = <T extends Nullable<string | number>>(
+  {
+    open,
+    searchedValue = '',
+    name,
+    label,
+    value,
+    defaultValue,
+    options,
+    inputProps,
+    isLoading,
+    emptyRequestText,
+    onChange,
+    onSearch,
+    ...rest
+  }: SelectSearchProps<PropsWithClassName<T>>,
+  ref: Ref<BaseSelectRef>
+) => {
   const { t } = useTranslate(['common'])
   const [isOpen, setIsOpen] = useState(open)
   const [searchValue, setSearchValue] = useState(searchedValue)
@@ -44,6 +47,7 @@ const SelectSearchComponent = <T extends Nullable<string | number>>({
 
   return (
     <RcSelect
+      ref={ref}
       mode='combobox'
       value={inputValue as T}
       searchValue={searchValue}
@@ -96,9 +100,9 @@ const SelectSearchComponent = <T extends Nullable<string | number>>({
       {...rest}
     >
       {isLoading ? (
-        <div className='pointer-events-none rc-select-item-option justify-center'>
+        <span className='pointer-events-none rc-select-item-option justify-center'>
           <Loading data-testid='select-preloader' className='select-preloader' />
-        </div>
+        </span>
       ) : options?.length ? (
         options.map(
           option =>
@@ -115,7 +119,7 @@ const SelectSearchComponent = <T extends Nullable<string | number>>({
             )
         )
       ) : (
-        <div className='container-empty-dropdown border-none'>{emptyRequestText || t('emptyRequest')}</div>
+        <span className='container-empty-dropdown border-none'>{emptyRequestText || t('emptyRequest')}</span>
       )}
     </RcSelect>
   )

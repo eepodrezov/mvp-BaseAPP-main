@@ -3,7 +3,6 @@ import { useTranslate } from '@/shared/lib'
 import cn from 'classnames'
 import { FCWithClassName, Nullable } from '@/shared/@types'
 import { Select, SelectProps } from '../select'
-import { range } from 'lodash'
 import { getNumberWithDevider } from '@/shared/helpers'
 
 export interface RangeSelectProps {
@@ -31,7 +30,37 @@ export const RangeSelect: FCWithClassName<RangeSelectProps> = ({
 }) => {
   const { t } = useTranslate(['common'])
   const options = useMemo(() => {
-    const steps = range(Math.ceil(min / 500000) * 500000, max + 500000, 500000)
+    // до 5 миллионов делаем шаг 500тр
+    // от 5 миллионов до 10 делаем шаг в 1 миллион
+    // от 10 делаем шаг в 5 миллионов
+    // от 30 делаем шаг в 10 миллионов
+    const breakPoints = [
+      {
+        value: 5000000,
+        breakPointStep: 1000000,
+      },
+      {
+        value: 10000000,
+        breakPointStep: 5000000,
+      },
+      {
+        value: 30000000,
+        breakPointStep: 10000000,
+      },
+    ]
+    const initialStep = 500000
+    const minStep = min < initialStep ? 0 : Math.ceil(min / initialStep) * initialStep
+    const maxStep = max + (breakPoints.find(breakPoint => max > breakPoint.value)?.breakPointStep || 0)
+    const steps: number[] = []
+    for (let i = minStep; i < maxStep; ) {
+      steps.push(i)
+      const currentBreakPoint = breakPoints.findIndex(
+        (breakPoint, bPIndex) =>
+          i >= breakPoint.value && (i < breakPoints[bPIndex + 1]?.value || !breakPoints[bPIndex + 1])
+      )
+      const currentStep = breakPoints[currentBreakPoint]?.breakPointStep
+      i += currentStep || initialStep
+    }
     const options = steps.map(option => {
       return { id: option, label: `${getNumberWithDevider(option, ',').toString()} ₽` }
     })

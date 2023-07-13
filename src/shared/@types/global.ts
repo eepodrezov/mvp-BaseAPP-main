@@ -1,7 +1,7 @@
 import { NextPage } from 'next'
 import { AppProps } from 'next/app'
 import { LANG_RU, LANG_EN, THEME_DARK, THEME_LIGHT, SORT_ASC, SORT_DESC } from '@/shared/config'
-import { FCWithChildren } from './utils'
+import { FCWithChildren, Nullable } from './utils'
 import { RESET } from 'jotai/utils'
 import { SetStateAction } from 'jotai'
 import dayjs from 'dayjs'
@@ -24,6 +24,12 @@ export type TFunction = (str: string) => string
 
 export type Language = typeof LANG_RU | typeof LANG_EN
 
+export type RouterQueryParams = {
+  code?: string
+  email?: string
+  isPasswordRecovery?: boolean
+  isProfilePrivateConfirmed?: boolean
+}
 export interface BaseEntity {
   id: number
   dateCreate: string
@@ -52,6 +58,10 @@ export interface CollectionResponse<T> {
 export interface FileModel extends BaseEntity {
   name: string
   pathS3?: string
+  originalImagePath?: string
+  mediumImagePath?: string
+  smallImagePath?: string
+  orderIndex: Nullable<number>
   path: string
   isFullPath: boolean
   loading?: boolean
@@ -94,6 +104,7 @@ export type FormField = {
   //  но в некоторых случаях отправляет число
   postAsNumber?: boolean
   isOnlyRu?: boolean
+  canStartWithNull?: boolean
 }
 
 export type FormStep = {

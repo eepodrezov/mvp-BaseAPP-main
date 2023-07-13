@@ -11,7 +11,7 @@ export const ProfileBreadcrumbs = () => {
     <div
       className='flex justify-between items-center'
     >
-        <ProfileFillnessEmptyIcon className='stroke-main w-[24px] h-[24px]'/>
+        <ProfileFillnessEmptyIcon className='stroke-primary w-[24px] h-[24px]'/>
         <div
           className='flex gap-1 w-[calc(100%-60px)]'
         >
@@ -19,7 +19,7 @@ export const ProfileBreadcrumbs = () => {
             <BreadcrumbPart filled={profileFullness.currentStage > i} key={stage.stageDescription}/>
           ))}
         </div>
-        <ProfileFillnessFullIcon className='stroke-main w-[24px] h-[24px]'/>
+        <ProfileFillnessFullIcon className='stroke-primary w-[24px] h-[24px]'/>
     </div>
   )
 }
@@ -34,7 +34,7 @@ const BreadcrumbPart:FC<BreadcrumbPartProps> = ({
   return (
     <div
       className={cn('flex-1 h-[4px] bg-gray',{
-        'bg-main': filled
+        'bg-black': filled
       })}
     ></div>
   )

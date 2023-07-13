@@ -13,9 +13,20 @@ export const OrderPageCarCard: FCWithClassName<OrderPageCarCardProps> = ({ loadi
   const { t } = useTranslate(['common'])
 
   return (
-    <ProfileCarCard car={car} loading={loading} isOrderPage withoutIndicatorNotChecked className={className}>
+    <ProfileCarCard
+      car={car}
+      loading={loading}
+      withHover={false}
+      isOrderPage
+      withoutIndicatorNotChecked
+      className={className}
+    >
       <p className='max-main:text-left max-main:col-span-3 text-center source-title'>
-        {loading ? <Skeleton /> : `${getCarPrice(car?.price?.rubValue, true) ?? ''} ${t('RUB')}`}
+        {loading ? (
+          <Skeleton />
+        ) : (
+          `${getCarPrice(car?.price?.rubValue || car?.price?.value, true, true, ' ') ?? ''} ${t('RUB')}`
+        )}
       </p>
       {loading ? (
         <Skeleton />

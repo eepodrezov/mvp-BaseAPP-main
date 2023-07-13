@@ -1,12 +1,17 @@
 import { FCWithClassName, Nullable } from '@/shared/@types'
 import { Switch } from '../switch'
-import { ColorOption, ColorOptionType } from './color-option'
-import { ResetColorsOption } from './reset-colors-option'
+import { ColorOption } from './color-option'
 import cn from 'classnames'
+import { Button } from '../button'
+import { useTranslate } from '@/shared/lib'
+import { Color } from '@/entities/car'
+import { UNDEFINED_TYPE_COLOR } from '@/shared/config'
 
 export interface ColorPaletteProps {
-  colors: ColorOptionType[]
+  name: string
+  colors: Omit<Color, 'models' | 'cars' | 'type'>[]
   withSelectAll?: boolean
+  isMaterials?: boolean
   selectAllLabel?: string
   selectedIds: Nullable<number[]>
   onChange: (ids: number[]) => void
@@ -19,7 +24,9 @@ export const ColorPalette: FCWithClassName<ColorPaletteProps> = ({
   withSelectAll,
   selectAllLabel,
   onChange,
+  isMaterials,
 }) => {
+  const { t } = useTranslate(['common'])
   const isAllSelected = selectedIds?.length === colors.length
 
   const onColorSelect = (id: number) => {
@@ -29,6 +36,16 @@ export const ColorPalette: FCWithClassName<ColorPaletteProps> = ({
     onChange([...(selectedIds || []), id])
   }
 
+  const colorsArr = (JSON.parse(JSON.stringify(colors)) as Color[]).sort((a, b) => {
+    if (a?.name === UNDEFINED_TYPE_COLOR) {
+      return 1
+    }
+    if (b?.name === UNDEFINED_TYPE_COLOR) {
+      return -1
+    }
+    return 0
+  })
+
   return (
     <div data-testid='color-palette' className={cn('flex flex-col gap-base', className)}>
       {withSelectAll && (
@@ -37,12 +54,13 @@ export const ColorPalette: FCWithClassName<ColorPaletteProps> = ({
           value={isAllSelected}
           name='selectAllColors'
           wrapperClassName='justify-between'
-          onChange={checked => (checked ? onChange(colors.map(color => color.id)) : onChange([]))}
+          onChange={checked => (checked ? onChange(colorsArr.map(color => color.id)) : onChange([]))}
         />
       )}
       <div className='columns-2 gap-5'>
-        {colors.map(color => (
+        {colorsArr.map(color => (
           <ColorOption
+            isMaterials={isMaterials}
             key={color.id}
             color={color}
             onChange={onColorSelect}
@@ -50,8 +68,16 @@ export const ColorPalette: FCWithClassName<ColorPaletteProps> = ({
             className='break-inside-avoid mb-small'
           />
         ))}
-        {!!selectedIds?.length && <ResetColorsOption onChange={() => onChange([])} />}
       </div>
+      <Button
+        data-testid='reset-colors-option'
+        variant='text'
+        disabled={!selectedIds?.length}
+        onClick={() => onChange([])}
+        className='self-end'
+      >
+        {t('Reset all')}
+      </Button>
     </div>
   )
 }

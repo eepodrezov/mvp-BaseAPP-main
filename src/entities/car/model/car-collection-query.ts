@@ -20,7 +20,8 @@ export const {
   brand: carCollectionBrand,
   model: carCollectionModel,
   generation: carCollectionGeneration,
-  'location.country.name': carCollectionLocation,
+  'location.country.id': carCollectionLocation,
+  'location.country.isCustomUnion': carCollectionIsCustomUnion,
   'manufacturer.location.country': carCollectionManufacturerCountry,
   bodyType: carCollectionBodyType,
   manufacturer: carCollectionManufacturer,
@@ -33,12 +34,13 @@ export const {
   price: carCollectionPrice,
   'mileage[between]': carCollectionMileage,
   'ownersCount[between]': carCollectionOwners,
-  'year[between]': carCollectionYears,
+  'age[between]': carCollectionAge,
   'enginePower[between]': carCollectionEnginePower,
   'literEngineVolume[between]': carCollectionEngineVolume,
   order: carCollectionOrder,
   interiorColors: carCollectionInteriorColors,
-  сolors: carCollectionExteriorColors,
+  exteriorColors: carCollectionExteriorColors,
+  materials: carCollectionMaterials,
 } = filterAtomsFactory(CAR_COLLECTION_INITIAL_FILTERS_ATOM_VALUES, { storageType: 'query' })
 
 const carsCollectionQuery = queryFactory(
@@ -65,6 +67,7 @@ export const useCarCollection = (params?: QueryParams<CollectionResponse<CarColl
   const model = useAtomValue(carCollectionModel)
   const generation = useAtomValue(carCollectionGeneration)
   const location = useAtomValue(carCollectionLocation)
+  const isCustomUnion = useAtomValue(carCollectionIsCustomUnion)
   const manufacturerLocation = useAtomValue(carCollectionManufacturerCountry)
   const bodyType = useAtomValue(carCollectionBodyType)
   const manufacturer = useAtomValue(carCollectionManufacturer)
@@ -77,19 +80,21 @@ export const useCarCollection = (params?: QueryParams<CollectionResponse<CarColl
   const price = useAtomValue(carCollectionPrice)
   const mileage = useAtomValue(carCollectionMileage)
   const owners = useAtomValue(carCollectionOwners)
-  const years = useAtomValue(carCollectionYears)
+  const age = useAtomValue(carCollectionAge)
   const enginePower = useAtomValue(carCollectionEnginePower)
   const literEngineVolume = useAtomValue(carCollectionEngineVolume)
   const order = useAtomValue(carCollectionOrder)
   const interiorColors = useAtomValue(carCollectionInteriorColors)
-  const сolors = useAtomValue(carCollectionExteriorColors)
+  const exteriorColors = useAtomValue(carCollectionExteriorColors)
+  const materials = useAtomValue(carCollectionMaterials)
 
   const filters = {
     type,
     brand,
     model,
     generation,
-    'location.country.name': location,
+    'location.country.id': location,
+    'location.country.isCustomUnion': isCustomUnion,
     'manufacturer.location.country': manufacturerLocation,
     bodyType,
     manufacturer,
@@ -99,13 +104,14 @@ export const useCarCollection = (params?: QueryParams<CollectionResponse<CarColl
     driveType,
     ecoType,
     configuration,
-    interiorColors,
-    сolors,
+    'colorGroup[0]': interiorColors?.length ? [interiorColors] : undefined,
+    'colorGroup[1]': exteriorColors?.length ? [exteriorColors] : undefined,
+    'material.materialGroup.id': materials?.length ? [materials] : undefined,
     'price.value[gte]': price?.[0],
     'price.value[lte]': price?.[1],
     'mileage[between]': getBetweenFilterValue(mileage),
     'ownersCount[between]': getBetweenFilterValue(owners),
-    'age[between]': getBetweenFilterValue(years),
+    'age[between]': getBetweenFilterValue(age),
     'enginePower[between]': getBetweenFilterValue(enginePower),
     'literEngineVolume[between]': getBetweenFilterValue(literEngineVolume),
   }
@@ -133,7 +139,11 @@ export const useCarCollection = (params?: QueryParams<CollectionResponse<CarColl
   type FilterKey = keyof typeof filters
 
   setHasFiltersChanged(
-    !!Object.keys(filters).find(key => filters[key as FilterKey] !== currentFilters[key as FilterKey])
+    !!Object.keys(filters).find(key => {
+      if (Array.isArray(filters[key as FilterKey])) {
+        return filters[key as FilterKey]?.toString() !== currentFilters[key as FilterKey]?.toString()
+      } else return filters[key as FilterKey] !== currentFilters[key as FilterKey]
+    })
   )
 
   return carsCollectionQuery.useHookInitializer(

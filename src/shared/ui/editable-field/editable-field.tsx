@@ -86,7 +86,7 @@ export const EditableField: FCWithClassName<EditableFieldProps & { children: Rea
   const customOnChange = (value: Nullable<string | number>) => {
     if (isMobile && fieldWithoutForm) setErrorChild(value as string)
     if (isEmail) setErrorChild(value as string)
-    if (children.props.type === 'number' && (!value || value < 0)) [setCurrentValue(0), onChange?.(0)]
+    if (children.props.type === 'number' && (!value || Number(value) < 0)) [setCurrentValue(0), onChange?.(0)]
     else [setCurrentValue(value), onChange?.(value)]
   }
 

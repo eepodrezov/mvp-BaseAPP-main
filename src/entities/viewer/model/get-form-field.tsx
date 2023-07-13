@@ -19,8 +19,8 @@ export function getFormField(field: FormField, t: TFunction, control: any) {
             placeholder={t(field.label)}
             //чтобы он не писал буквы, но сразу писал ошибку, что требуются только цифры
             value={formField.value ? String(formField.value) : ''}
-            onChange={e => formField.onChange(+e.target.value)}
             isRequired={isRequired}
+            canStartWithNull={field.canStartWithNull}
           />
         )}
       />
@@ -62,6 +62,7 @@ export function getFormField(field: FormField, t: TFunction, control: any) {
               label={t(field.label)}
               placeholder={t(field.label)}
               isRequired={isRequired}
+              canStartWithNull={field.canStartWithNull}
             />
           )}
         />

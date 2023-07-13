@@ -1,1 +1,1 @@
-export * from './confirm-registration-phone'
+export * from './confirm-phone'

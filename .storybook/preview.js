@@ -19,7 +19,7 @@ export const parameters = {
     },
   },
   i18n,
-  locale: 'en',
+  locale: 'ru',
   locales: {
     en: 'English',
     ru: 'Russian',

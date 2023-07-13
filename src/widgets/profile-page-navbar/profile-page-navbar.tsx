@@ -1,5 +1,5 @@
 import { SidebarTabs, SidebarTabItem } from '@/shared/ui/sidebar-tabs'
-import { Favorites, Info, Orders, Payments, PrivateInfo, Settings, Stock } from '@/shared/assets/icons/sidebar-icons'
+import { Favorites, Info, Orders, PrivateInfo, Settings, Stock } from '@/shared/assets/icons/sidebar-icons'
 import { Button } from '@/shared/ui'
 import { useTranslate } from '@/shared/lib'
 import LogOutIcon from '@/shared/assets/icons/common/log-out.svg'
@@ -10,9 +10,9 @@ import {
   PROFILE_ORDERS_URL,
   PROFILE_FAVORITES_URL,
   PROFILE_SETTINGS_URL,
-  PROFILE_PAYMENTS_URL,
   PROFILE_INFO_URL,
   PROFILE_STOCK_URL,
+  PROFILE_WIDGET_URL,
 } from './lib'
 import { logoutViewer, ROLE_DEALER, viewerAtom } from '@/entities/viewer'
 import { useAtom } from 'jotai'
@@ -40,15 +40,17 @@ export const ProfilePageNavbar: FCWithClassName<ProfilePageNavbarProps> = ({ cla
     },
     { name: t('car:favorites'), icon: <Favorites className='stroke-currentColor' />, url: PROFILE_FAVORITES_URL },
     { name: t('Settings'), icon: <Settings className='stroke-currentColor' />, url: PROFILE_SETTINGS_URL },
-    { name: t('Payment history'), icon: <Payments className='stroke-currentColor' />, url: PROFILE_PAYMENTS_URL },
+    //Может пригодиться в дальнейшем
+    // { name: t('Payment history'), icon: <Payments className='stroke-currentColor' />, url: PROFILE_PAYMENTS_URL },
     { name: t('Help'), icon: <Info className='fill-currentColor' />, url: PROFILE_INFO_URL },
+    { name: t('Widget'), icon: <Info className='fill-currentColor' />, url: PROFILE_WIDGET_URL },
   ]
 
   return (
     <div
       className={cn(
         className,
-        'tablet:w-[262px] px-5 tablet:px-large tablet:bg-black flex flex-col tablet:items-center gap-large tablet:justify-between py-large'
+        'tablet:w-[262px] px-5 tablet:px-large tablet:bg-black flex flex-col tablet:items-center gap-large tablet:justify-between'
       )}
     >
       <div className='flex flex-col gap-large tablet:items-center'>

@@ -77,12 +77,7 @@ export interface Car extends BaseEntity {
   ownersCount: number
   mileage: number
   dealer: ObjectWithName
-  price: {
-    currency: Currency
-    value: number
-    rubValue: number
-    id: number
-  }
+  price: Price
   prices: {
     value: number
   }[]
@@ -109,6 +104,7 @@ export interface Car extends BaseEntity {
   literEngineVolume: number
   visible: boolean
   user: Nullable<User>
+  additionalInformation: string
 }
 
 export interface CarBase extends BaseEntity {
@@ -186,9 +182,12 @@ export interface Dealer extends BaseEntity {
 export interface Color extends BaseEntity {
   name: string
   hex: string
+  assetPath?: string
   models: (string | Model)[]
   cars: (string | Car)[]
   type: typeof COLOR_TYPE_INTER | typeof COLOR_TYPE_BODY
+  group?: { name?: string; hex?: string; assetPath?: string }
+  icon?: { id: number; name?: string; pathS3?: string }
 }
 
 export interface BodyType extends BaseEntity {
@@ -237,6 +236,7 @@ export interface Location {
   country: {
     id: number
     name: string
+    isCustomUnion: boolean
   }
 }
 
@@ -246,6 +246,13 @@ export interface ProfileCar extends BaseEntity {
   firstRegDate: string
   enginePower: number
   literEngineVolume: number
+}
+
+export interface Price {
+  currency: Currency
+  value: number
+  rubValue: number
+  id: number
 }
 
 export interface Currency {

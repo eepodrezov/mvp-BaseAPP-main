@@ -22,7 +22,12 @@ export const FavoriteCarCard: FC<FavoriteCarCardProps> = ({ loading, href, favor
 
   const { mainValue } = useMemo(
     () =>
-      getCarPriceStr(t, getCarPrice(carPrice?.rubValue, true), getCarPrice(carPrice?.value), carPrice?.currency?.name),
+      getCarPriceStr(
+        t,
+        getCarPrice(carPrice?.rubValue, true),
+        getCarPrice(carPrice?.value, true),
+        carPrice?.currency?.name
+      ),
     [carPrice?.rubValue, carPrice?.value]
   )
 

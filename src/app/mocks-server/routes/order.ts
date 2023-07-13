@@ -1,5 +1,11 @@
-import { ORDERS_REQUEST_TARGET, ORDER_PAY_REQUEST_TARGET, ORDER_REQUEST_TARGET } from '@/entities/order'
-import { ORDER_CAR_ENTITY_MOCK, ORDER_ENTITY_MOCK, PAYMENT_ENTITY_MOCK } from '@/shared/config'
+import {
+  DOCUMENTS_REQUEST_TARGET,
+  ORDERS_REQUEST_TARGET,
+  ORDER_PAY_REQUEST_TARGET,
+  ORDER_REQUEST_TARGET,
+  PAYMENT_INSCTRUCTION_REQUEST_TARGET,
+} from '@/entities/order'
+import { FILE_ENTITY_MOCK, ORDER_CAR_ENTITY_MOCK, ORDER_ENTITY_MOCK, PAYMENT_ENTITY_MOCK } from '@/shared/config'
 import { getSingleRequestTarget } from '@/shared/lib'
 import { mock } from 'mockjs'
 import { rest } from 'msw'
@@ -23,5 +29,11 @@ export const orders = [
   }),
   rest.delete(addBaseDataURL(getSingleRequestTarget(1, ORDER_REQUEST_TARGET)), (_, res, ctx) => {
     return res(ctx.status(200), ctx.json({ message: 'ok' }))
+  }),
+  rest.get(addBaseDataURL(DOCUMENTS_REQUEST_TARGET), (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(getBaseResponseCollectionModel(req, FILE_ENTITY_MOCK)))
+  }),
+  rest.get(addBaseDataURL(PAYMENT_INSCTRUCTION_REQUEST_TARGET), (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(getBaseResponseCollectionModel(req, FILE_ENTITY_MOCK)))
   }),
 ]

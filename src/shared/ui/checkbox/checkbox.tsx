@@ -26,7 +26,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         </label>
       </div>
       {error && errorMessage && (
-        <p data-testid='checkbox-error-message' className='source-mobile-text text-red mt-small'>
+        <p data-testid='checkbox-error-message' className='source-text text-red select-none'>
           {errorMessage}
         </p>
       )}

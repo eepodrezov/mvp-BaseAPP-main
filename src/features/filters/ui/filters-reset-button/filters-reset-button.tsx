@@ -21,7 +21,7 @@ import {
   carCollectionPrice,
   carCollectionTransmissionType,
   carCollectionType,
-  carCollectionYears,
+  carCollectionAge,
   isFiltersApplyAtom,
 } from '@/entities/car'
 import { FCWithClassName } from '@/shared/@types'
@@ -51,7 +51,7 @@ export const FiltersResetButton: FCWithClassName = ({ className }) => {
   const resetPrice = useResetAtom(carCollectionPrice)
   const resetMileage = useResetAtom(carCollectionMileage)
   const resetOwners = useResetAtom(carCollectionOwners)
-  const resetYears = useResetAtom(carCollectionYears)
+  const resetAge = useResetAtom(carCollectionAge)
   const resetEnginePower = useResetAtom(carCollectionEnginePower)
   const resetEngineVolume = useResetAtom(carCollectionEngineVolume)
   const resetOrder = useResetAtom(carCollectionOrder)
@@ -76,7 +76,7 @@ export const FiltersResetButton: FCWithClassName = ({ className }) => {
     resetPrice()
     resetMileage()
     resetOwners()
-    resetYears()
+    resetAge()
     resetEnginePower()
     resetType()
     resetEngineVolume()

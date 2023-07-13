@@ -11,7 +11,7 @@ export const CarCatalogPlug: FC<CarCatalogPlugProps> = ({ notFoundText }) => {
   return (
     <div className='w-full flex flex-col items-center justify-start gap-large pt-10 desktop:pt-[140px]'>
       <CarPlugIcon width={120} height={93} />
-      <p className='croogla-modile text-text desktop:croogla-title select-none text-center'>
+      <p className='croogla-mobile text-text desktop:croogla-title select-none text-center'>
         {notFoundText || t('No cars upon request')}
       </p>
     </div>

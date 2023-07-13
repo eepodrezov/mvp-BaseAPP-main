@@ -1,39 +1,44 @@
 import Head from 'next/head'
 import { API_MOCKING } from '@/shared/config'
-import { AppPropsWithLayout } from '@/shared/@types'
 import App from '@/app'
 //Next.js требует импортировать глобальные стили только в _app.tsx
 import '@/app/index.css'
-import { useWindowDimensions } from '@/shared/hooks'
-import { DesktopPlug } from '@/shared/ui/desktop-plug'
-import Joyride from 'react-joyride'
+import { AppPropsWithLayout } from '@/shared/@types'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+import { getTokens } from '@/shared/lib'
+import { setCookie } from 'nookies'
+import Script from 'next/script'
 
 if (API_MOCKING === 'enabled') {
   require('@/app/mocks-server')
 }
 
 const _App = (props: AppPropsWithLayout) => {
-  const { isMobile } = useWindowDimensions()
-  if (!isMobile) return <DesktopPlug />
-  const STEPS = [
-    {
-      target: '#app',
-      content: 'This is the App',
-    },
-    {
-      target: '#ui',
-      content: 'This is UI',
-    },
-  ]
+  const router = useRouter()
+  const newFingerprint = router?.query?._fp
+  const { fingerprint } = getTokens()
+  useEffect(() => {
+    if (!fingerprint && newFingerprint) {
+      setCookie(null, 'fingerprint', newFingerprint as string)
+    }
+  }, [newFingerprint, fingerprint])
   return (
     <>
       <Head>
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <meta
+          name='viewport'
+          content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no'
+        />
+        <meta name='HandheldFriendly' content='true' />
+        <meta name='robots' content='noindex,nofollow' />
+        <meta name='googlebot' content='noindex,nofollow' />
+        <meta name='google' content='nositelinkssearchbox' />
+        <meta name='google' content='notranslate' />
+        <meta name='yandex' content='none' />
       </Head>
+      <Script type='module' src='https://widget.referral.dev2.webant.ru/assets/widget.js'></Script>
       <App {...props} />
-      <Joyride
-          steps={STEPS}
-      />
     </>
   )
 }

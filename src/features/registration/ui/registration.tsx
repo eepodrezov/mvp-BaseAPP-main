@@ -7,12 +7,16 @@ import { registrationSchema, RequestRegistrationTypes, serverSideRegistrationVal
 import { registrationEmailAtom, registrationModalAtom, registrationPhoneAtom, useRegistration } from '../model'
 import { confirmEmailModalAtom, confirmPhoneModalAtom, signInModalAtom } from '@/features'
 
-import { Button, Input, TypeMobilePhone } from '@/shared/ui'
+import { Button, Checkbox, Input, TypeMobilePhone } from '@/shared/ui'
 import { getDeepClone } from '@/shared/helpers'
 import { Controller } from 'react-hook-form'
 import { PLACEHOLDER_MOBILE_PHONE } from '@/shared/config'
+import Link from 'next/link'
+import { getTokens } from '@/shared/lib'
 
 export const Registration: FC = () => {
+  const { fingerprint } = getTokens()
+
   const { t } = useTranslate(['common'])
   const { onOpen: onOpenSignIn } = useModalState(signInModalAtom)
   const { onClose: onCloseRegistrationModal } = useModalState(registrationModalAtom)
@@ -22,21 +26,25 @@ export const Registration: FC = () => {
   const setEmailModal = useUpdateAtom(registrationEmailAtom)
   const setPhoneModal = useUpdateAtom(registrationPhoneAtom)
 
-  const { mutate, isLoading } = useRegistration({
-    onSuccess: data => {
-      onCloseRegistrationModal()
-      setTimeout(() => {
-        if (isFieldEmail) {
-          setEmailModal(data.email)
-          onOpenConfirmEmailModal()
-        } else {
-          setPhoneModal(data.phone)
-          onOpenConfirmPhoneModal()
-        }
-      }, 400)
+  const { mutate, isLoading } = useRegistration(
+    {
+      onSuccess: data => {
+        onCloseRegistrationModal()
+        setTimeout(() => {
+          if (isFieldEmail) {
+            setEmailModal(data.email)
+            onOpenConfirmEmailModal()
+          } else {
+            setPhoneModal(data.phone)
+            onOpenConfirmPhoneModal()
+          }
+        }, 400)
+      },
+      onError: error => serverSideRegistrationValidation(t, error, isFieldEmail),
     },
-    onError: error => serverSideRegistrationValidation(t, error, isFieldEmail),
-  })
+    undefined,
+    fingerprint as string
+  )
 
   return (
     <div className='flex flex-col desktop:w-[500px] w-full gap-[23px] select-none'>
@@ -60,16 +68,18 @@ export const Registration: FC = () => {
         </div>
       </div>
       <Form<RequestRegistrationTypes>
+        //@ts-expect-error
         validationSchema={registrationSchema(t, isFieldEmail)}
         onSubmit={data => {
           const normalizeData = getDeepClone(data)
           delete normalizeData.repeatPassword
+          delete normalizeData.userAgreementConfirmation
           if (!isFieldEmail) normalizeData.username = '+' + data.username
           mutate(normalizeData)
         }}
         formParams={{ mode: 'onChange', shouldUnregister: true }}
       >
-        {({ formState: { isValid }, control, setValue }) => (
+        {({ formState: { isValid }, control, setValue, trigger, watch }) => (
           <div className='flex flex-col gap-[23px]'>
             <div className='flex flex-col items-end gap-small'>
               {isFieldEmail ? (
@@ -78,13 +88,13 @@ export const Registration: FC = () => {
                 <Controller
                   name='username'
                   control={control}
-                  render={({ field, formState: { errors } }) => (
+                  render={({ field, fieldState: { error } }) => (
                     <Input<TypeMobilePhone>
                       type='tel'
                       placeholder={PLACEHOLDER_MOBILE_PHONE}
                       label={t('phoneNumber')}
-                      error={!!errors.username}
-                      errorMessage={errors.username?.message}
+                      error={!!error}
+                      errorMessage={error?.message}
                       {...field}
                     />
                   )}
@@ -102,12 +112,25 @@ export const Registration: FC = () => {
             <Input label={t('Last name')} name='lastName' placeholder={t('Last name')} />
             <Input label={t('First name')} name='firstName' placeholder={t('First name')} />
             <Input label={t('Middle name')} name='middleName' placeholder={t('Middle name')} />
-            <Input
+            <Controller
               name='plainPassword'
-              label={t('Plain password')}
-              placeholder={t('Plain password')}
-              type='password'
-              passwordStrength
+              control={control}
+              render={({ field, fieldState: { error } }) => (
+                <Input
+                  {...field}
+                  name='plainPassword'
+                  label={t('Plain password')}
+                  placeholder={t('Plain password')}
+                  type='password'
+                  onChange={e => {
+                    field.onChange(e)
+                    watch('repeatPassword') && trigger('repeatPassword')
+                  }}
+                  passwordStrength
+                  error={!!error}
+                  errorMessage={error?.message}
+                />
+              )}
             />
             <Input
               name='repeatPassword'
@@ -116,6 +139,35 @@ export const Registration: FC = () => {
               type='password'
               passwordStrength
             />
+            <Controller
+              name='userAgreementConfirmation'
+              control={control}
+              render={({ field: { value, ...rest }, fieldState: { error } }) => (
+                <Checkbox
+                  {...rest}
+                  label={
+                    <span>
+                      {`${t('I agree with')} ${t('the')} `}
+                      <Link href='/termservice'>
+                        <a target='_blank' rel='noreferrer'>
+                          {t('Terms of Service')}
+                        </a>
+                      </Link>
+                      {` ${t('and')} ${t('the')} `}
+                      <Link href='/termdataproccesing'>
+                        <a target='_blank' rel='noreferrer'>
+                          {t('Terms of Data Processing')}
+                        </a>
+                      </Link>
+                    </span>
+                  }
+                  checked={value}
+                  error={!!error}
+                  errorMessage={error?.message}
+                />
+              )}
+            />
+
             <div className='w-full flex gap-[23px] justify-end'>
               <Button variant='text' className='!w-[85px]' onClick={onCloseRegistrationModal} data-testid='closeButton'>
                 {t('cancel')}
