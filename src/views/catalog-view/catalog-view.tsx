@@ -7,6 +7,7 @@ import cn from 'classnames'
 import { PaginationProps } from '@/shared/ui'
 import { useRestoreScroll } from '@/shared/hooks'
 import { CarCard } from '@/entities/car/ui/car-card'
+import { ProductCard } from '@/entities/product/ui'
 
 const CarCatalogHeader = dynamic(() => import('@/widgets/car-catalog-header'), { ssr: false })
 const FiltersContent = dynamic(() => import('@/features/filters'), { ssr: false })
@@ -36,7 +37,7 @@ export const CatalogView = () => {
     }
 
     return data?.items?.map((car: CarCollectionItem) => (
-      <CarCard href={`/autos/${car.id}`} key={car.id} type='catalog' car={car} />
+      <ProductCard href={`/autos/${car.id}`} key={car.id} type='catalog' car={car} />
     ))
   }, [isRefetching, isFetching, isDataEmpty, isFetched, isSuccess])
 

@@ -114,6 +114,65 @@ export const CAR_ENTITY_MOCK = {
   additionalInformation: '@title(20)',
 }
 
+export const PRODUCT_ENTITY_MOCK = {
+  name: '@title(3)',
+  'id|+1': 1,
+  brand: {
+    name: '@title(3)',
+  },
+  model: {
+    name: '@title(2)',
+  },
+  configuration: '@title(3)',
+  type: 0,
+  'images|15': [IMAGE_ENTITY_MOCK_WITH_TEXT],
+  year: 0,
+  'ownersCount|0-100': 0,
+  'mileage|0-1000000': 0,
+  dealer: '@title(2)',
+  price: {
+    'value|0-10000000': 0,
+    'rubValue|0-10000000': 0,
+    currency: {
+      name: '@title(2)',
+    },
+  },
+  'prices|3': ['price|0-10000000'],
+  vin: '@guid',
+  location: {
+    city: '@city',
+    country: '@county',
+  },
+  manufacturer: {
+    name: '@title(2)',
+    location: {
+      city: '@city',
+      country: '@county',
+    },
+  },
+  // TODO: сверить с бэком
+  // additionalCharacteristics: string[],
+  'literEngineVolume|1-9': 0,
+  firstRegDate: '@date',
+  dateOfManufacturer: '@date',
+  // TODO: сверить с бэком
+  // colors: string[],
+  bodyType: '@title(1)',
+  'colors|1-2': [COLOR_ENTITY_MOCK],
+  'interiorColors|1-2': [COLOR_ENTITY_MOCK],
+  'driveType|0-3': 0,
+  'fuelType|0-6': 0,
+  'transmissionType|0-3': 0,
+  generation: '@title(2)',
+  'enginePower|1-9': 0,
+  'engineVolume|1-9': 0,
+  'literengineVolume|1-9': 0,
+  'ecoType|0-5': 0,
+  interiorMaterials: '@title(2)',
+  'additionalCharacteristics|3': ['string|0-10000000'],
+  additionalInformation: '@title(20)',
+}
+
 export const CAR_FILTER_DATA_ENTITY_MOCK = {
   'price_min|0-5000': 0,
   'price_max|5001-10000': 0,
